@@ -53,6 +53,58 @@ input[type="text"], input[type="number"] {
     color: black;  
 }  
 
+/* Clickable dots styling */
+.dot {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.dot:hover {
+    color: #666;
+}
+
+.dot.filled {
+    color: black;
+}
+
+/* Tab styling */
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #333;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    background: #e8e8e8;
+    color: #333;
+}
+
+.tab-button.active {
+    background: white;
+    color: #333;
+    border-bottom: 2px solid white;
+    margin-bottom: -2px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 ol {  
     padding-left: 20px;  
 }  
@@ -180,5 +232,18 @@ ol li input {
     .attribute-category, .additional-info .section, .other-details .section {  
         min-width: 100%;  
     }  
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tab-button {
+        border: 1px solid #ccc;
+        border-bottom: none;
+    }
+
+    .tab-button.active {
+        border-bottom: 2px solid #333;
+    }
 }
 

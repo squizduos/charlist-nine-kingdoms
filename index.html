@@ -28,122 +28,139 @@
         </div>
         <h1 class="character-id">ID 16825</h1>
       </div>
-            <!-- Attributes Section -->  
-            <div class="attributes">  
-                <div class="attribute-category">  
-                    <h2>СОЦИАЛЬНЫЕ</h2>  
-                    <div class="attribute">  
-                        <label>ХАРИЗМА <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>МАНИПУЛИРОВАНИЕ <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>ПРОНИКНОВЕНИЕ <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>ОБМАН <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span></div></label>  
-                        <label>ДРАЧЛИВОСТЬ <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                    </div>  
-                    <ol>  
-                        <li><input type="text" placeholder="Соблазнитель"></li>  
-                        <li><input type="text" placeholder="Твердый характер"></li>  
-                        <li><input type="text" placeholder="Оратор"></li>  
-                    </ol>  
-                </div>  
-                <div class="attribute-category">  
-                    <h2>МЕНТАЛЬНЫЕ</h2>  
-                    <div class="attribute">  
-                        <label>ВНИМАНИЕ <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>ИНТЕЛЛЕКТ <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>НАУКИ <div class="dots"><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>КУЛЬТУРА <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                    </div>  
-                    <ol>  
-                        <li><input type="text" placeholder="Следопыт"></li>  
-                        <li><input type="text" placeholder="Кулинария"></li>  
-                    </ol>  
-                </div>  
-                <div class="attribute-category">  
-                    <h2>ФИЗИЧЕСКИЕ</h2>  
-                    <div class="attribute">  
-                        <label>ТЕЛОСЛОЖЕНИЕ <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>ЗАЩИТА <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>ЛОВКОСТЬ <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>СИЛА <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>ВЫНОСЛИВОСТЬ <div class="dots"><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                    </div>  
-                    <ol>  
-                        <li><input type="text" placeholder="Меткость"></li>  
-                        <li><input type="text" placeholder="Гибкость"></li>  
-                    </ol>  
-                </div>  
-            </div>  
 
-            <!-- Additional Sections -->  
-            <div class="additional-info">  
-                <div class="section">  
-                    <h2>ОПЫТ</h2>  
-                    <div class="dots experience"><span class="filled">★</span><span class="filled">★</span><span>★</span><span>★</span><span>★</span></div>  
-                </div>  
-                <div class="section">  
-                    <h2>НР</h2>  
-                    <div class="dots health"><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span></div>  
-                </div>  
-                <div class="section">  
-                    <h2>ЛЕТАЛ</h2>  
-                    <div class="dots"><span class="filled">⬤</span><span class="filled">⬤</span><span class="filled">⬤</span><span>⬤</span><span>⬤</span></div>  
-                </div>  
-                <div class="section">  
-                    <h2>ТУПОЙ</h2>  
-                    <div class="dots"><span class="filled">⬤</span><span>⬤</span><span>⬤</span><span>⬤</span><span>⬤</span></div>  
-                </div>  
-            </div>  
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-button active" onclick="openTab('attributes')">ХАРАКТЕРИСТИКИ</button>
+        <button class="tab-button" onclick="openTab('additional')">ДОПОЛНИТЕЛЬНО</button>
+        <button class="tab-button" onclick="openTab('notes')">ЗАМЕТКИ</button>
+      </div>
 
-            <!-- Other Details -->  
-            <div class="other-details">  
-                <div class="section">  
-                    <h2>БОЕЗАПАС</h2>  
-                    <input type="text" value="16825">  
+      <!-- Tab Content -->
+      <div id="attributes" class="tab-content active">
+        <!-- Attributes Section -->  
+        <div class="attributes">  
+            <div class="attribute-category">  
+                <h2>СОЦИАЛЬНЫЕ</h2>  
+                <div class="attribute">  
+                    <label>ХАРИЗМА <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>МАНИПУЛИРОВАНИЕ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>ПРОНИКНОВЕНИЕ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>ОБМАН <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>ДРАЧЛИВОСТЬ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                 </div>  
-                <div class="section">  
-                    <h2>РАСХОДНЫЕ МАТЕРИАЛЫ</h2>  
-                    <div class="resources">  
-                        <label>ОЧКИ <div class="dots"><span class="filled">⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>Струны <div class="dots"><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>ФИМ <div class="dots"><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                        <label>АРТЕФАКТЫ <div class="dots"><span>⬤</span><span>⬤</span><span>⬤</span></div></label>  
-                    </div>  
-                </div>  
+                <ol>  
+                    <li><input type="text" placeholder="Соблазнитель"></li>  
+                    <li><input type="text" placeholder="Твердый характер"></li>  
+                    <li><input type="text" placeholder="Оратор"></li>  
+                </ol>  
             </div>  
+            <div class="attribute-category">  
+                <h2>МЕНТАЛЬНЫЕ</h2>  
+                <div class="attribute">  
+                    <label>ВНИМАНИЕ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>ИНТЕЛЛЕКТ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>НАУКИ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>КУЛЬТУРА <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                </div>  
+                <ol>  
+                    <li><input type="text" placeholder="Следопыт"></li>  
+                    <li><input type="text" placeholder="Кулинария"></li>  
+                </ol>  
+            </div>  
+            <div class="attribute-category">  
+                <h2>ФИЗИЧЕСКИЕ</h2>  
+                <div class="attribute">  
+                    <label>ТЕЛОСЛОЖЕНИЕ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>ЗАЩИТА <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>ЛОВКОСТЬ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>СИЛА <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                    <label>ВЫНОСЛИВОСТЬ <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                </div>  
+                <ol>  
+                    <li><input type="text" placeholder="Меткость"></li>  
+                    <li><input type="text" placeholder="Гибкость"></li>  
+                </ol>  
+            </div>  
+        </div>  
+      </div>
 
-            <!-- Right Section: Additional Notes -->  
-            <div class="additional-notes">  
-                <h2>ДОПОЛНИТЕЛЬНЫЕ ЗАМЕТКИ</h2>  
-                <ul>  
-                    <li><input type="text" value="Фляшка с правилами"></li>  
-                    <li><input type="text" value="Медвежья лапа"></li>  
-                    <li><input type="text" value="Поддельные водительские права"></li>  
-                    <li><input type="text" value="Номер Илоны"></li>  
-                    <li><input type="text" value="Одна кожаная плётка"></li>  
-                    <li><input type="text" value="Чёрная маска кошечки"></li>  
-                    <li><input type="text" value="Носки"></li>  
-                    <li><input type="text" value="Номер Каварейки"></li>  
-                    <li><input type="text" value="Номера всех сотрудников лагеря"></li>  
-                    <li><input type="text" value="10 сим-карт"></li>  
-                    <li><input type="text" value="Шмат рыбы и шмат мяса"></li>  
-                    <li><input type="text" value="Ключи от BMW Егора Андреевича"></li>  
-                    <li><input type="text" value="Кулон Золотой Раковины"></li>  
-                    <li><input type="text" value="Визитка Владика"></li>  
-                    <li><input type="text" value="Сигареты Командора"></li>  
-                    <li><input type="text" value="2 костюма Hello Kitty"></li>  
-                    <li><input type="text" value="Пуховик Hello Kitty"></li>  
-                    <li><input type="text" value="Записки с именем Антон Градов и номером телефона"></li>  
-                    <li><input type="text" value="Визитка Евгения Олеговича Прокофьева"></li>  
-                    <li><input type="text" value="Ключ от квартиры Васи"></li>  
-                    <li><input type="text" value="Железный хуй"></li>  
-                    <li><input type="text" value="Прокофьев Евгений Олегович"></li>  
-                    <li><input type="text" value="Кристалл из комнаты Алевтины"></li>  
-                    <li><input type="text" value="Пластиковые розы"></li>  
-                    <li><input type="text" value="Клеевой пистолет"></li>  
-                    <li><input type="text" value="Банка с вареньем и банка с помидорами"></li>  
-                    <li><input type="text" value="Сигареты Бонд Крепкие"></li>  
-                </ul>  
+      <div id="additional" class="tab-content">
+        <!-- Additional Sections -->  
+        <div class="additional-info">  
+            <div class="section">  
+                <h2>ОПЫТ</h2>  
+                <div class="dots experience" data-max="5"><span class="dot" data-value="1">★</span><span class="dot" data-value="2">★</span><span class="dot" data-value="3">★</span><span class="dot" data-value="4">★</span><span class="dot" data-value="5">★</span></div>  
             </div>  
-        </div>
-    </body>
+            <div class="section">  
+                <h2>НР</h2>  
+                <div class="dots health" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div>  
+            </div>  
+            <div class="section">  
+                <h2>ЛЕТАЛ</h2>  
+                <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div>  
+            </div>  
+            <div class="section">  
+                <h2>ТУПОЙ</h2>  
+                <div class="dots" data-max="5"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div>  
+            </div>  
+        </div>  
+
+        <!-- Other Details -->  
+        <div class="other-details">  
+            <div class="section">  
+                <h2>БОЕЗАПАС</h2>  
+                <input type="text" value="16825">  
+            </div>  
+            <div class="section">  
+                <h2>РАСХОДНЫЕ МАТЕРИАЛЫ</h2>  
+                <div class="resources">  
+                    <label>ОЧКИ <div class="dots" data-max="3"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span></div></label>  
+                    <label>Струны <div class="dots" data-max="3"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span></div></label>  
+                    <label>ФИМ <div class="dots" data-max="3"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span></div></label>  
+                    <label>АРТЕФАКТЫ <div class="dots" data-max="3"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span></div></label>  
+                </div>  
+            </div>  
+        </div>  
+      </div>
+
+      <div id="notes" class="tab-content">
+        <!-- Right Section: Additional Notes -->  
+        <div class="additional-notes">  
+            <h2>ДОПОЛНИТЕЛЬНЫЕ ЗАМЕТКИ</h2>  
+            <ul>  
+                <li><input type="text" value="Фляшка с правилами"></li>  
+                <li><input type="text" value="Медвежья лапа"></li>  
+                <li><input type="text" value="Поддельные водительские права"></li>  
+                <li><input type="text" value="Номер Илоны"></li>  
+                <li><input type="text" value="Одна кожаная плётка"></li>  
+                <li><input type="text" value="Чёрная маска кошечки"></li>  
+                <li><input type="text" value="Носки"></li>  
+                <li><input type="text" value="Номер Каварейки"></li>  
+                <li><input type="text" value="Номера всех сотрудников лагеря"></li>  
+                <li><input type="text" value="10 сим-карт"></li>  
+                <li><input type="text" value="Шмат рыбы и шмат мяса"></li>  
+                <li><input type="text" value="Ключи от BMW Егора Андреевича"></li>  
+                <li><input type="text" value="Кулон Золотой Раковины"></li>  
+                <li><input type="text" value="Визитка Владика"></li>  
+                <li><input type="text" value="Сигареты Командора"></li>  
+                <li><input type="text" value="2 костюма Hello Kitty"></li>  
+                <li><input type="text" value="Пуховик Hello Kitty"></li>  
+                <li><input type="text" value="Записки с именем Антон Градов и номером телефона"></li>  
+                <li><input type="text" value="Визитка Евгения Олеговича Прокофьева"></li>  
+                <li><input type="text" value="Ключ от квартиры Васи"></li>  
+                <li><input type="text" value="Железный хуй"></li>  
+                <li><input type="text" value="Прокофьев Евгений Олегович"></li>  
+                <li><input type="text" value="Кристалл из комнаты Алевтины"></li>  
+                <li><input type="text" value="Пластиковые розы"></li>  
+                <li><input type="text" value="Клеевой пистолет"></li>  
+                <li><input type="text" value="Банка с вареньем и банка с помидорами"></li>  
+                <li><input type="text" value="Сигареты Бонд Крепкие"></li>  
+            </ul>  
+        </div>  
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
