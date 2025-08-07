@@ -64,7 +64,7 @@ class CharacterManager {
             kitchenName: 'Лилиям',
             concept: 'Глупец',
             age: '21',
-            income: 'Создатель: Лебиди',
+            gameType: 'Материк',
             characterId: '16825',
             
             // Social attributes
@@ -185,12 +185,15 @@ class CharacterManager {
                 <div class="character-info">
                     <label>ПЕРСОНАЖ <input type="text" value="${character.data.characterName}" data-field="characterName"></label>
                     <label>ИГРОК <input type="text" value="${character.data.playerName}" data-field="playerName"></label>
-                    <label>КИТЧЕН <input type="text" value="${character.data.kitchenName}" data-field="kitchenName"></label>
+                    <label>КИТЭЙН <input type="text" value="${character.data.kitchenName}" data-field="kitchenName"></label>
                 </div>
                 <div class="concept">
                     <label>КОНЦЕПЦИЯ <input type="text" value="${character.data.concept}" data-field="concept"></label>
                     <label>ВОЗРАСТ <input type="number" value="${character.data.age}" data-field="age"></label>
-                    <label>ДОХОДНОВАНИЕ <input type="text" value="${character.data.income}" data-field="income"></label>
+                    <label>ТИП ЛИСТА <select data-field="gameType">
+                        <option value="Материк" ${character.data.gameType === 'Материк' ? 'selected' : ''}>Материк</option>
+                        <option value="Фейри" ${character.data.gameType === 'Фейри' ? 'selected' : ''}>Фейри</option>
+                    </select></label>
                 </div>
                 <div class="human-figure-header">
                     <h3>ТЕЛО ПЕРСОНАЖА</h3>
@@ -852,6 +855,15 @@ class CharacterManager {
                 // Ensure experience field exists
                 if (character.data.experience === undefined) {
                     character.data.experience = 0;
+                }
+                
+                // Handle migration from income to gameType
+                if (character.data.income !== undefined && character.data.gameType === undefined) {
+                    character.data.gameType = 'Материк'; // Default value for old characters
+                    delete character.data.income;
+                }
+                if (character.data.gameType === undefined) {
+                    character.data.gameType = 'Материк';
                 }
             });
         }
