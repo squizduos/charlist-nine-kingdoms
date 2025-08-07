@@ -154,6 +154,21 @@ input[type="text"], input[type="number"] {
     color: black;
 }
 
+/* Locked dots styling */
+.dot.locked {
+    color: #999 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+.dot.locked:hover {
+    color: #999 !important;
+}
+
+.dot.locked.filled {
+    color: #999 !important;
+}
+
 /* Tab styling */
 .tabs {
     display: flex;

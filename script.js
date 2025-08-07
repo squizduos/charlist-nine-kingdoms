@@ -483,6 +483,9 @@ class CharacterManager {
             const field = container.getAttribute('data-field');
             const value = character.data[field] || 0;
             this.setDotsValue(container, value);
+            
+            // Apply dot limits for damage and rerolls
+            this.applyDotLimits(container, character);
         });
         
         // Set initial figure parts state
@@ -501,9 +504,20 @@ class CharacterManager {
         const dots = sheet.querySelectorAll('.dot');
         dots.forEach(dot => {
             dot.addEventListener('click', (e) => {
+                // Check if dot is locked
+                if (e.target.classList.contains('locked')) {
+                    return; // Don't allow interaction with locked dots
+                }
+                
                 const dotsContainer = e.target.parentElement;
                 const clickedValue = parseInt(e.target.getAttribute('data-value'));
                 const field = dotsContainer.getAttribute('data-field');
+                
+                // Check limits before allowing the action
+                const limits = this.calculateDotLimits(character);
+                if (limits[field] !== undefined && clickedValue > limits[field]) {
+                    return; // Don't allow interaction beyond the limit
+                }
                 
                 // Update character data
                 character.data[field] = clickedValue;
@@ -512,9 +526,9 @@ class CharacterManager {
                 const allDots = dotsContainer.querySelectorAll('.dot');
                 allDots.forEach((dot, index) => {
                     const dotValue = index + 1;
-                    if (dotValue <= clickedValue) {
+                    if (dotValue <= clickedValue && !dot.classList.contains('locked')) {
                         dot.classList.add('filled');
-                    } else {
+                    } else if (!dot.classList.contains('locked')) {
                         dot.classList.remove('filled');
                     }
                 });
@@ -525,12 +539,24 @@ class CharacterManager {
             // Add right-click event for damage dots
             dot.addEventListener('contextmenu', (e) => {
                 e.preventDefault(); // Prevent default context menu
+                
+                // Check if dot is locked
+                if (e.target.classList.contains('locked')) {
+                    return; // Don't allow interaction with locked dots
+                }
+                
                 const dotsContainer = e.target.parentElement;
                 const field = dotsContainer.getAttribute('data-field');
                 
                 // Only handle damage dots and new tracking dots
                 if (field === 'stupidDamage' || field === 'lethalDamage' || field === 'mentalDamageBig' || field === 'mentalDamageSmall' || field === 'permanentWill' || field === 'rerolls' || field === 'experience') {
                     const clickedValue = parseInt(e.target.getAttribute('data-value'));
+                    
+                    // Check limits before allowing the action
+                    const limits = this.calculateDotLimits(character);
+                    if (limits[field] !== undefined && clickedValue > limits[field]) {
+                        return; // Don't allow interaction beyond the limit
+                    }
                     
                     // Update character data - unfill from clicked dot onwards
                     character.data[field] = clickedValue - 1;
@@ -540,9 +566,9 @@ class CharacterManager {
                     const allDots = dotsContainer.querySelectorAll('.dot');
                     allDots.forEach((dot, index) => {
                         const dotValue = index + 1;
-                        if (dotValue <= character.data[field]) {
+                        if (dotValue <= character.data[field] && !dot.classList.contains('locked')) {
                             dot.classList.add('filled');
-                        } else {
+                        } else if (!dot.classList.contains('locked')) {
                             dot.classList.remove('filled');
                         }
                     });
@@ -590,6 +616,67 @@ class CharacterManager {
                 dot.classList.remove('filled');
             }
         });
+    }
+
+    // Calculate maximum values for damage dots based on character attributes
+    calculateDotLimits(character) {
+        const limits = {};
+        
+        // Convert string values to numbers for calculations
+        const brawling = parseInt(character.data.brawling) || 0;
+        const physique = parseInt(character.data.physique) || 0;
+        const permanentWill = parseInt(character.data.permanentWill) || 0;
+        
+        // lethalDamage and stupidDamage max value = "brawling + physique"
+        limits.lethalDamage = brawling + physique;
+        limits.stupidDamage = brawling + physique;
+        
+        // rerolls max value = permanentWill
+        limits.rerolls = permanentWill;
+        
+        return limits;
+    }
+
+    // Apply dot limits to a container
+    applyDotLimits(container, character) {
+        const field = container.getAttribute('data-field');
+        const limits = this.calculateDotLimits(character);
+        
+        if (limits[field] !== undefined) {
+            const dots = container.querySelectorAll('.dot');
+            const maxValue = limits[field];
+            const currentValue = character.data[field] || 0;
+            
+            dots.forEach((dot, index) => {
+                const dotValue = index + 1;
+                
+                if (dotValue > maxValue || maxValue === 0) {
+                    // Lock dots above the limit or if limit is 0
+                    dot.classList.add('locked');
+                    dot.classList.add('filled');
+                    dot.style.cursor = 'not-allowed';
+                    dot.style.color = '#999'; // Gray color for locked dots
+                } else {
+                    // Unlock dots within the limit
+                    dot.classList.remove('locked');
+                    dot.style.cursor = 'pointer';
+                    dot.style.color = ''; // Reset to default color
+                    
+                    // Set filled state based on current value
+                    if (dotValue <= currentValue) {
+                        dot.classList.add('filled');
+                    } else {
+                        dot.classList.remove('filled');
+                    }
+                }
+            });
+            
+            // If current value exceeds the new limit, reduce it
+            if (currentValue > maxValue) {
+                character.data[field] = maxValue;
+                this.setDotsValue(container, maxValue);
+            }
+        }
     }
     
     showCharacter(index) {
@@ -662,6 +749,22 @@ class CharacterManager {
         this.showCharacter(this.currentCharacterIndex);
     }
     
+    // Update dot limits for all character sheets
+    updateDotLimits() {
+        this.characters.forEach(character => {
+            const sheet = document.getElementById(`character-${character.id}`);
+            if (!sheet) return;
+            
+            const dotsContainers = sheet.querySelectorAll('.dots');
+            dotsContainers.forEach(container => {
+                const field = container.getAttribute('data-field');
+                if (field === 'lethalDamage' || field === 'stupidDamage' || field === 'rerolls') {
+                    this.applyDotLimits(container, character);
+                }
+            });
+        });
+    }
+
     saveToStorage() {
         // Update character data from form inputs
         this.characters.forEach(character => {
@@ -692,6 +795,9 @@ class CharacterManager {
                 character.name = characterNameInput.value || `Персонаж ${character.id}`;
             }
         });
+        
+        // Update dot limits after saving
+        this.updateDotLimits();
         
         localStorage.setItem('characterSheets', JSON.stringify({
             characters: this.characters,
