@@ -91,7 +91,6 @@ class CharacterManager {
             physicalSpecialties: ['Меткость', 'Гибкость'],
             
             // Additional stats
-            experience: 2,
             health: 5,
             lethal: 0,
             stupid: 0,
@@ -102,6 +101,31 @@ class CharacterManager {
             strings: 0,
             fim: 0,
             artifacts: 0,
+            
+            // Human figure parts (for injury tracking)
+            figureParts: {
+                head: false,
+                leftArm: false,
+                rightArm: false,
+                body: false,
+                leftLeg: false,
+                rightLeg: false
+            },
+            
+            // Damage tracking
+            stupidDamage: 0,
+            lethalDamage: 0,
+            
+            // Mental damage tracking
+            mentalDamageBig: 0,
+            mentalDamageSmall: 0,
+            
+            // Additional tracking
+            permanentWill: 0,
+            rerolls: 0,
+            
+            // Experience tracking
+            experience: 0,
             
             // Notes
             notes: [
@@ -168,6 +192,169 @@ class CharacterManager {
                     <label>ВОЗРАСТ <input type="number" value="${character.data.age}" data-field="age"></label>
                     <label>ДОХОДНОВАНИЕ <input type="text" value="${character.data.income}" data-field="income"></label>
                 </div>
+                <div class="human-figure-header">
+                    <h3>ТЕЛО ПЕРСОНАЖА</h3>
+                    <div class="human-figure-container">
+                        <svg class="human-figure" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Head -->
+                            <circle class="figure-part ${character.data.figureParts.head ? 'injured' : ''}" 
+                                    id="head-${character.id}" 
+                                    cx="100" cy="30" r="20" 
+                                    data-part="head" 
+                                    data-character-id="${character.id}"/>
+                            
+                            <!-- Body -->
+                            <rect class="figure-part ${character.data.figureParts.body ? 'injured' : ''}" 
+                                  id="body-${character.id}" 
+                                  x="80" y="50" width="40" height="80" 
+                                  data-part="body" 
+                                  data-character-id="${character.id}"/>
+                            
+                            <!-- Left Arm -->
+                            <rect class="figure-part ${character.data.figureParts.leftArm ? 'injured' : ''}" 
+                                  id="leftArm-${character.id}" 
+                                  x="40" y="60" width="40" height="15" 
+                                  data-part="leftArm" 
+                                  data-character-id="${character.id}"/>
+                            
+                            <!-- Right Arm -->
+                            <rect class="figure-part ${character.data.figureParts.rightArm ? 'injured' : ''}" 
+                                  id="rightArm-${character.id}" 
+                                  x="120" y="60" width="40" height="15" 
+                                  data-part="rightArm" 
+                                  data-character-id="${character.id}"/>
+                            
+                            <!-- Left Leg -->
+                            <rect class="figure-part ${character.data.figureParts.leftLeg ? 'injured' : ''}" 
+                                  id="leftLeg-${character.id}" 
+                                  x="85" y="130" width="15" height="60" 
+                                  data-part="leftLeg" 
+                                  data-character-id="${character.id}"/>
+                            
+                            <!-- Right Leg -->
+                            <rect class="figure-part ${character.data.figureParts.rightLeg ? 'injured' : ''}" 
+                                  id="rightLeg-${character.id}" 
+                                  x="100" y="130" width="15" height="60" 
+                                  data-part="rightLeg" 
+                                  data-character-id="${character.id}"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="damage-dots">
+                    <div class="damage-line">
+                        <label>Летальный урон</label>
+                        <div class="dots big-dots" data-max="10" data-field="lethalDamage" data-character-id="${character.id}">
+                            <span class="dot" data-value="1">⬤</span>
+                            <span class="dot" data-value="2">⬤</span>
+                            <span class="dot" data-value="3">⬤</span>
+                            <span class="dot" data-value="4">⬤</span>
+                            <span class="dot" data-value="5">⬤</span>
+                            <span class="dot" data-value="6">⬤</span>
+                            <span class="dot" data-value="7">⬤</span>
+                            <span class="dot" data-value="8">⬤</span>
+                            <span class="dot" data-value="9">⬤</span>
+                            <span class="dot" data-value="10">⬤</span>
+                        </div>
+                    </div>
+                    <div class="damage-line">
+                        <label>Тупой урон</label>
+                        <div class="dots" data-max="10" data-field="stupidDamage" data-character-id="${character.id}">
+                            <span class="dot" data-value="1">⬤</span>
+                            <span class="dot" data-value="2">⬤</span>
+                            <span class="dot" data-value="3">⬤</span>
+                            <span class="dot" data-value="4">⬤</span>
+                            <span class="dot" data-value="5">⬤</span>
+                            <span class="dot" data-value="6">⬤</span>
+                            <span class="dot" data-value="7">⬤</span>
+                            <span class="dot" data-value="8">⬤</span>
+                            <span class="dot" data-value="9">⬤</span>
+                            <span class="dot" data-value="10">⬤</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="damage-line">
+                        <label>Постоянная Воля</label>
+                        <div class="dots big-dots" data-max="10" data-field="permanentWill" data-character-id="${character.id}">
+                            <span class="dot" data-value="1">⬤</span>
+                            <span class="dot" data-value="2">⬤</span>
+                            <span class="dot" data-value="3">⬤</span>
+                            <span class="dot" data-value="4">⬤</span>
+                            <span class="dot" data-value="5">⬤</span>
+                            <span class="dot" data-value="6">⬤</span>
+                            <span class="dot" data-value="7">⬤</span>
+                            <span class="dot" data-value="8">⬤</span>
+                            <span class="dot" data-value="9">⬤</span>
+                            <span class="dot" data-value="10">⬤</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="damage-line">
+                        <label>Бедламы</label>
+                        <div class="dots big-dots" data-max="10" data-field="mentalDamageBig" data-character-id="${character.id}">
+                            <span class="dot" data-value="1">⬤</span>
+                            <span class="dot" data-value="2">⬤</span>
+                            <span class="dot" data-value="3">⬤</span>
+                            <span class="dot" data-value="4">⬤</span>
+                            <span class="dot" data-value="5">⬤</span>
+                            <span class="dot" data-value="6">⬤</span>
+                            <span class="dot" data-value="7">⬤</span>
+                            <span class="dot" data-value="8">⬤</span>
+                            <span class="dot" data-value="9">⬤</span>
+                            <span class="dot" data-value="10">⬤</span>
+                        </div>
+                    </div>
+                    <div class="damage-line">
+                        <label>Кошмары</label>
+                        <div class="dots" data-max="10" data-field="mentalDamageSmall" data-character-id="${character.id}">
+                            <span class="dot" data-value="1">⬤</span>
+                            <span class="dot" data-value="2">⬤</span>
+                            <span class="dot" data-value="3">⬤</span>
+                            <span class="dot" data-value="4">⬤</span>
+                            <span class="dot" data-value="5">⬤</span>
+                            <span class="dot" data-value="6">⬤</span>
+                            <span class="dot" data-value="7">⬤</span>
+                            <span class="dot" data-value="8">⬤</span>
+                            <span class="dot" data-value="9">⬤</span>
+                            <span class="dot" data-value="10">⬤</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="damage-line">
+                        <label>Перебросы</label>
+                        <div class="dots" data-max="10" data-field="rerolls" data-character-id="${character.id}">
+                            <span class="dot" data-value="1">⬤</span>
+                            <span class="dot" data-value="2">⬤</span>
+                            <span class="dot" data-value="3">⬤</span>
+                            <span class="dot" data-value="4">⬤</span>
+                            <span class="dot" data-value="5">⬤</span>   
+                            <span class="dot" data-value="6">⬤</span>
+                            <span class="dot" data-value="7">⬤</span>
+                            <span class="dot" data-value="8">⬤</span>
+                            <span class="dot" data-value="9">⬤</span>
+                            <span class="dot" data-value="10">⬤</span>
+                        </div>
+                    </div>
+                    <div class="damage-line">
+                        <label>Опыт</label>
+                        <div class="dots big-dots" data-max="15" data-field="experience" data-character-id="${character.id}">
+                            <span class="dot" data-value="1">⬤</span>
+                            <span class="dot" data-value="2">⬤</span>
+                            <span class="dot" data-value="3">⬤</span>
+                            <span class="dot" data-value="4">⬤</span>
+                            <span class="dot" data-value="5">⬤</span>
+                            <span class="dot" data-value="6">⬤</span>
+                            <span class="dot" data-value="7">⬤</span>
+                            <span class="dot" data-value="8">⬤</span>
+                            <span class="dot" data-value="9">⬤</span>
+                            <span class="dot" data-value="10">⬤</span>
+                            <span class="dot" data-value="11">⬤</span>
+                            <span class="dot" data-value="12">⬤</span>
+                            <span class="dot" data-value="13">⬤</span>
+                            <span class="dot" data-value="14">⬤</span>
+                            <span class="dot" data-value="15">⬤</span>
+                        </div>
+                    </div>
+                </div>
                 <h1 class="character-id">ID ${character.data.characterId}</h1>
             </div>
 
@@ -187,9 +374,9 @@ class CharacterManager {
                         <div class="attribute">  
                             <label>ХАРИЗМА <div class="dots" data-max="5" data-field="charisma"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                             <label>МАНИПУЛИРОВАНИЕ <div class="dots" data-max="5" data-field="manipulation"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
-                            <label>ПРОНИКНОВЕНИЕ <div class="dots" data-max="5" data-field="insight"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                            <label>ПРОНИЦАТЕЛЬНОСТЬ <div class="dots" data-max="5" data-field="insight"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                             <label>ОБМАН <div class="dots" data-max="5" data-field="deception"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
-                            <label>ДРАЧЛИВОСТЬ <div class="dots" data-max="5" data-field="brawling"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                            <label>ХРАБРОСТЬ <div class="dots" data-max="5" data-field="brawling"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                         </div>  
                         <ol>  
                             <li><input type="text" placeholder="Соблазнитель" value="${character.data.socialSpecialties[0] || ''}" data-field="socialSpecialties" data-index="0"></li>  
@@ -204,7 +391,8 @@ class CharacterManager {
                             <label>ИНТЕЛЛЕКТ <div class="dots" data-max="5" data-field="intelligence"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                             <label>НАУКИ <div class="dots" data-max="5" data-field="sciences"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                             <label>КУЛЬТУРА <div class="dots" data-max="5" data-field="culture"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
-                        </div>  
+                            <label>НАВЫКИ <div class="dots" data-max="5" data-field="skills"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                            </div>  
                         <ol>  
                             <li><input type="text" placeholder="Следопыт" value="${character.data.mentalSpecialties[0] || ''}" data-field="mentalSpecialties" data-index="0"></li>  
                             <li><input type="text" placeholder="Кулинария" value="${character.data.mentalSpecialties[1] || ''}" data-field="mentalSpecialties" data-index="1"></li>  
@@ -216,8 +404,8 @@ class CharacterManager {
                             <label>ТЕЛОСЛОЖЕНИЕ <div class="dots" data-max="5" data-field="physique"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                             <label>ЗАЩИТА <div class="dots" data-max="5" data-field="defense"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                             <label>ЛОВКОСТЬ <div class="dots" data-max="5" data-field="dexterity"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
-                            <label>СИЛА <div class="dots" data-max="5" data-field="strength"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
-                            <label>ВЫНОСЛИВОСТЬ <div class="dots" data-max="5" data-field="stamina"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                            <label>НАПАДЕНИЕ <div class="dots" data-max="5" data-field="strength"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
+                            <label>СКРЫТНОСТЬ <div class="dots" data-max="5" data-field="stamina"><span class="dot" data-value="1">⬤</span><span class="dot" data-value="2">⬤</span><span class="dot" data-value="3">⬤</span><span class="dot" data-value="4">⬤</span><span class="dot" data-value="5">⬤</span></div></label>  
                         </div>  
                         <ol>  
                             <li><input type="text" placeholder="Меткость" value="${character.data.physicalSpecialties[0] || ''}" data-field="physicalSpecialties" data-index="0"></li>  
@@ -296,6 +484,17 @@ class CharacterManager {
             const value = character.data[field] || 0;
             this.setDotsValue(container, value);
         });
+        
+        // Set initial figure parts state
+        const figureParts = sheet.querySelectorAll('.figure-part');
+        figureParts.forEach(part => {
+            const partName = part.getAttribute('data-part');
+            if (character.data.figureParts && character.data.figureParts[partName]) {
+                part.classList.add('injured');
+            } else {
+                part.classList.remove('injured');
+            }
+        });
     }
     
     setupDotEventListeners(sheet, character) {
@@ -319,6 +518,62 @@ class CharacterManager {
                         dot.classList.remove('filled');
                     }
                 });
+                
+                this.saveToStorage();
+            });
+            
+            // Add right-click event for damage dots
+            dot.addEventListener('contextmenu', (e) => {
+                e.preventDefault(); // Prevent default context menu
+                const dotsContainer = e.target.parentElement;
+                const field = dotsContainer.getAttribute('data-field');
+                
+                // Only handle damage dots and new tracking dots
+                if (field === 'stupidDamage' || field === 'lethalDamage' || field === 'mentalDamageBig' || field === 'mentalDamageSmall' || field === 'permanentWill' || field === 'rerolls' || field === 'experience') {
+                    const clickedValue = parseInt(e.target.getAttribute('data-value'));
+                    
+                    // Update character data - unfill from clicked dot onwards
+                    character.data[field] = clickedValue - 1;
+                    if (character.data[field] < 0) character.data[field] = 0;
+                    
+                    // Update all dots in this container
+                    const allDots = dotsContainer.querySelectorAll('.dot');
+                    allDots.forEach((dot, index) => {
+                        const dotValue = index + 1;
+                        if (dotValue <= character.data[field]) {
+                            dot.classList.add('filled');
+                        } else {
+                            dot.classList.remove('filled');
+                        }
+                    });
+                    
+                    this.saveToStorage();
+                }
+            });
+        });
+        
+        // Setup human figure part event listeners
+        const figureParts = sheet.querySelectorAll('.figure-part');
+        figureParts.forEach(part => {
+            part.addEventListener('click', (e) => {
+                const partName = e.target.getAttribute('data-part');
+                const characterId = e.target.getAttribute('data-character-id');
+                
+                // Find the character
+                const characterIndex = this.characters.findIndex(c => c.id == characterId);
+                if (characterIndex === -1) return;
+                
+                const currentCharacter = this.characters[characterIndex];
+                
+                // Toggle the injured state
+                currentCharacter.data.figureParts[partName] = !currentCharacter.data.figureParts[partName];
+                
+                // Update the visual state
+                if (currentCharacter.data.figureParts[partName]) {
+                    e.target.classList.add('injured');
+                } else {
+                    e.target.classList.remove('injured');
+                }
                 
                 this.saveToStorage();
             });
@@ -450,6 +705,49 @@ class CharacterManager {
             const data = JSON.parse(saved);
             this.characters = data.characters || [];
             this.nextId = data.nextId || 1;
+            
+            // Ensure all characters have the figureParts property
+            this.characters.forEach(character => {
+                if (!character.data.figureParts) {
+                    character.data.figureParts = {
+                        head: false,
+                        leftArm: false,
+                        rightArm: false,
+                        body: false,
+                        leftLeg: false,
+                        rightLeg: false
+                    };
+                }
+                
+                // Ensure damage fields exist
+                if (character.data.stupidDamage === undefined) {
+                    character.data.stupidDamage = 0;
+                }
+                if (character.data.lethalDamage === undefined) {
+                    character.data.lethalDamage = 0;
+                }
+                
+                // Ensure mental damage fields exist
+                if (character.data.mentalDamageBig === undefined) {
+                    character.data.mentalDamageBig = 0;
+                }
+                if (character.data.mentalDamageSmall === undefined) {
+                    character.data.mentalDamageSmall = 0;
+                }
+                
+                // Ensure additional tracking fields exist
+                if (character.data.permanentWill === undefined) {
+                    character.data.permanentWill = 0;
+                }
+                if (character.data.rerolls === undefined) {
+                    character.data.rerolls = 0;
+                }
+                
+                // Ensure experience field exists
+                if (character.data.experience === undefined) {
+                    character.data.experience = 0;
+                }
+            });
         }
     }
     

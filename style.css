@@ -212,7 +212,7 @@ ol li input {
     display: flex;  
     flex-wrap: wrap;  
     justify-content: space-between;  
-    align-items: center;  
+    align-items: flex-start;  
     gap: 10px;  
 }  
 
@@ -220,6 +220,115 @@ ol li input {
     flex: 1;  
     min-width: 200px;  
 }  
+
+.human-figure-header {
+    flex: 0 0 auto;
+    text-align: center;
+    min-width: 150px;
+    margin-left: 20px;
+}
+
+.human-figure-header h3 {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    color: #333;
+    border-bottom: 1px solid #333;
+    padding-bottom: 5px;
+}
+
+.human-figure-header .human-figure-container {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+.human-figure-header .human-figure {
+    width: 120px;
+    height: 180px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background: #f9f9f9;
+}
+
+.damage-dots {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.damage-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 10px;
+}
+
+.damage-line label {
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    min-width: 80px;
+}
+
+.damage-line .dots {
+    display: flex;
+    gap: 2px;
+    margin: 0;
+}
+
+.damage-line .dot {
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.damage-line .dot:hover {
+    color: #666;
+}
+
+.damage-line .dot.filled {
+    color: black;
+}
+
+.damage-line .big-dots .dot {
+    font-size: 1.2em;
+}
+
+.damage-line .big-dots .dot:hover {
+    color: #666;
+}
+
+.damage-line .big-dots .dot.filled {
+    color: black;
+}
+
+
+.experience-dots {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.experience-row {
+    display: flex;
+    gap: 2px;
+    justify-content: flex-start;
+}
+
+.experience-dots .dot {
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.experience-dots .dot:hover {
+    color: #666;
+}
+
+.experience-dots .dot.filled {
+    color: black;
+}
 
 .character-id {  
     font-size: 2em;  
@@ -306,6 +415,48 @@ ol li input {
     border-radius: 4px;  
 }  
 
+/* Human Figure Section */
+.human-figure-section {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.human-figure-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.human-figure {
+    width: 200px;
+    height: 300px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+.figure-part {
+    fill: #e0e0e0;
+    stroke: #333;
+    stroke-width: 2;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.figure-part:hover {
+    fill: #d0d0d0;
+    stroke-width: 3;
+}
+
+.figure-part.injured {
+    fill: #ff4444;
+    stroke: #cc0000;
+}
+
+.figure-part.injured:hover {
+    fill: #ff6666;
+}
+
 /* Print Styles */
 @media print {
     .global-controls,
@@ -359,6 +510,21 @@ ol li input {
     
     .character-tabs {
         flex-direction: column;
+    }
+    
+    .header {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .human-figure-header {
+        margin-left: 0;
+        margin-top: 20px;
+        order: 3;
+    }
+    
+    .character-id {
+        order: 4;
     }
 }
 
