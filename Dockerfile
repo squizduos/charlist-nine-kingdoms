@@ -6,7 +6,7 @@ FROM node:20-alpine AS build
 # Метаданные
 LABEL maintainer="Semyon Bochkaryov"
 LABEL description="Чар-лист Девяти Королевств - веб-приложение"
-LABEL version="1.0.0"
+LABEL version="0.1.0"
 
 WORKDIR /app
 
@@ -30,7 +30,7 @@ FROM nginx:alpine AS production
 # Метаданные
 LABEL maintainer="Semyon Bochkaryov"
 LABEL description="Чар-лист Девяти Королевств - production"
-LABEL version="1.0.0"
+LABEL version="0.1.0"
 
 # Удаляем дефолтную конфигурацию nginx
 RUN rm -rf /etc/nginx/conf.d/default.conf
