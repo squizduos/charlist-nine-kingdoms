@@ -1,0 +1,111 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { useCharacterStore } from '../../stores/character'
+import DotStrip from '../ui/DotStrip.vue'
+import ExplanationModal from '../ui/ExplanationModal.vue'
+
+const store = useCharacterStore()
+const character = computed(() => store.character)
+
+// Модальное окно пояснений
+const showModal = ref(false)
+const modalTitle = ref('')
+const currentExplanation = ref('')
+const currentBlock = ref<'arts' | 'birthrights'>('arts')
+const currentIndex = ref(0)
+
+function openExplanation(block: 'arts' | 'birthrights', index: number) {
+  const item = block === 'arts' 
+    ? character.value.arts[index] 
+    : character.value.birthrights[index]
+  currentBlock.value = block
+  currentIndex.value = index
+  modalTitle.value = item.name || (block === 'arts' ? `Искусство ${index + 1}` : `Право ${index + 1}`)
+  currentExplanation.value = item.explanation || ''
+  showModal.value = true
+}
+
+function saveExplanation(explanation: string) {
+  if (currentBlock.value === 'arts') {
+    character.value.arts[currentIndex.value].explanation = explanation
+  } else {
+    character.value.birthrights[currentIndex.value].explanation = explanation
+  }
+}
+</script>
+
+<template>
+  <div class="arts-section">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Блок 1: Искусства -->
+      <div class="arts-block">
+        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Искусства</h3>
+        
+        <div class="space-y-2">
+          <div
+            v-for="(art, index) in character.arts"
+            :key="index"
+            class="flex items-center gap-2"
+          >
+            <input
+              v-model="art.name"
+              type="text"
+              class="flex-1 text-sm min-w-[120px]"
+            />
+            <button
+              type="button"
+              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
+              :class="art.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+              @click="openExplanation('arts', index)"
+            >
+              ?
+            </button>
+            <DotStrip
+              v-model="art.value"
+              :max="5"
+            />
+          </div>
+        </div>
+      </div>
+      
+      <!-- Блок 2: Права рождения -->
+      <div class="birthrights-block">
+        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Права рождения</h3>
+        
+        <div class="space-y-2">
+          <div
+            v-for="(birthright, index) in character.birthrights"
+            :key="index"
+            class="flex items-center gap-2"
+          >
+            <input
+              v-model="birthright.name"
+              type="text"
+              class="flex-1 text-sm min-w-[120px]"
+            />
+            <button
+              type="button"
+              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
+              :class="birthright.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+              @click="openExplanation('birthrights', index)"
+            >
+              ?
+            </button>
+            <DotStrip
+              v-model="birthright.value"
+              :max="5"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Модальное окно пояснений -->
+    <ExplanationModal
+      v-model="showModal"
+      :title="modalTitle"
+      :explanation="currentExplanation"
+      @update:explanation="saveExplanation"
+    />
+  </div>
+</template>
