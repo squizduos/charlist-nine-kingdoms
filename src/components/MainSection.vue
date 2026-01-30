@@ -32,12 +32,15 @@ function toggleTheme() {
 }
 
 // Диалог загрузки
-const fileInput = ref<HTMLInputElement | null>(null)
+const fileInputId = 'character-file-input'
 const isLoading = ref(false)
 const loadProgress = ref(0)
 
 function triggerFileUpload() {
-  fileInput.value?.click()
+  const fileInput = document.getElementById(fileInputId) as HTMLInputElement
+  if (fileInput) {
+    fileInput.click()
+  }
 }
 
 async function handleFileUpload(event: Event) {
@@ -79,9 +82,8 @@ function handleSave() {
 }
 
 function handleNewCharacter() {
-  if (confirm('Создать нового персонажа? Текущие данные будут потеряны, если не сохранены.')) {
-    store.resetCharacter()
-  }
+  // Создаём новую вкладку с пустым персонажем
+  store.createTab()
 }
 
 function handlePrint() {
@@ -237,10 +239,10 @@ function handlePrint() {
     
     <!-- Скрытый input для загрузки файла -->
     <input
-      ref="fileInput"
+      :id="fileInputId"
       type="file"
       accept=".json"
-      class="hidden"
+      class="sr-only"
       @change="handleFileUpload"
     />
     

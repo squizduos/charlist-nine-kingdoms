@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useCharacterStore } from './stores/character'
 import MainSection from './components/MainSection.vue'
+import CharacterTabs from './components/ui/CharacterTabs.vue'
 import TabContainer from './components/ui/TabContainer.vue'
 import AttributesSection from './components/sections/AttributesSection.vue'
 import MindSection from './components/sections/MindSection.vue'
@@ -17,7 +18,7 @@ onMounted(() => {
   store.loadFromLocalStorage()
 })
 
-const tabs = [
+const sectionTabs = [
   { id: 'attributes', label: 'I. Атрибуты', component: AttributesSection },
   { id: 'mind', label: 'II. Рассудок', component: MindSection },
   { id: 'arts', label: 'III. Искусства', component: ArtsSection },
@@ -30,13 +31,16 @@ const tabs = [
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <header class="text-center mb-4 print:mb-2">
+    <header class="text-center mb-2 print:mb-2">
       <h1 class="text-3xl font-bold" style="color: var(--color-ink);">Девять королевств</h1>
     </header>
     
-    <MainSection />
+    <!-- Вкладки персонажей -->
+    <CharacterTabs class="mb-2" />
     
-    <TabContainer :tabs="tabs" class="mt-4 flex-1" />
+    <MainSection :key="store.activeTabId" />
+    
+    <TabContainer :tabs="sectionTabs" class="mt-4 flex-1" />
     
     <!-- Футер -->
     <footer class="mt-8 py-4 text-center text-xs opacity-60 no-print" style="border-top: 1px solid rgba(128,128,128,0.2);">

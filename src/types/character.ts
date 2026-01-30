@@ -1,6 +1,13 @@
 // Тип чар-листа
 export type CharacterSheetType = 'mainland' | 'faerie'
 
+// Вкладка с персонажем
+export interface CharacterTab {
+  id: string
+  name: string
+  character: Character
+}
+
 // Структура параметра с изменяемым названием
 export interface EditableParameter {
   name: string
