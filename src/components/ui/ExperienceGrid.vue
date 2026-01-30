@@ -39,7 +39,6 @@ function isFilled(dotIndex: number): boolean {
 
 <template>
   <div class="experience-grid">
-    <div class="text-sm font-medium mb-1">Опыт</div>
     <div class="flex flex-col gap-1">
       <div v-for="(row, rowIndex) in rows" :key="rowIndex" class="flex gap-1">
         <button
@@ -53,6 +52,6 @@ function isFilled(dotIndex: number): boolean {
         />
       </div>
     </div>
-    <div class="text-xs text-ink/70 mt-1">{{ modelValue }} / 15</div>
+    <div class="text-xs opacity-70 mt-1">{{ modelValue }} / 15</div>
   </div>
 </template>

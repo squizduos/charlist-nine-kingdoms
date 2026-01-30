@@ -37,7 +37,7 @@ function handleBackdropClick(e: MouseEvent) {
       class="fixed inset-0 bg-ink/50 flex items-center justify-center z-50 p-4"
       @click="handleBackdropClick"
     >
-      <div class="bg-parchment rounded-lg shadow-xl max-w-lg w-full p-4">
+      <div class="rounded-lg shadow-xl max-w-lg w-full p-4" style="background-color: var(--color-surface);">
         <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-2">
           {{ title || 'Пояснение' }}
         </h3>

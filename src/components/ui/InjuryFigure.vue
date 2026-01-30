@@ -112,7 +112,7 @@ function getPartColor(part: keyof Injuries): string {
     </svg>
     
     <!-- Легенда -->
-    <div class="text-xs text-ink/70 mt-1 space-y-0.5">
+    <div class="text-xs opacity-70 mt-1 space-y-0.5">
       <div v-if="modelValue.head" class="text-blood">Голова</div>
       <div v-if="modelValue.body" class="text-blood">Тело</div>
       <div v-if="modelValue.leftArm" class="text-blood">Левая рука</div>

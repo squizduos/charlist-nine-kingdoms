@@ -6,17 +6,34 @@
   font-family: Georgia, 'Times New Roman', serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #2c1810;
-  background-color: #f4e4bc;
+  color: #1a1a1a;
+  background-color: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  --color-surface: #ffffff;
+  --color-surface-secondary: #f5f5f5;
+  --color-ink: #1a1a1a;
+  --color-blood: #8b0000;
+}
+
+/* Тёмная тема */
+.dark {
+  color: #e5e5e5;
+  background-color: #1a1a1a;
+  
+  --color-surface: #1a1a1a;
+  --color-surface-secondary: #2d2d2d;
+  --color-ink: #e5e5e5;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
 }
 
 #app {
@@ -27,19 +44,33 @@ body {
 
 /* Dot styles */
 .dot {
-  @apply w-5 h-5 rounded-full border-2 border-ink cursor-pointer transition-colors;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  border: 2px solid var(--color-ink);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+  background-color: transparent;
 }
 
 .dot.filled {
-  @apply bg-ink;
+  background-color: var(--color-ink);
 }
 
 .dot:hover {
-  @apply bg-ink/30;
+  background-color: rgba(26, 26, 26, 0.3);
+}
+
+.dark .dot:hover {
+  background-color: rgba(229, 229, 229, 0.3);
 }
 
 .dot.filled:hover {
-  @apply bg-ink/70;
+  background-color: rgba(26, 26, 26, 0.7);
+}
+
+.dark .dot.filled:hover {
+  background-color: rgba(229, 229, 229, 0.7);
 }
 
 /* Print styles */
@@ -49,7 +80,10 @@ body {
     print-color-adjust: exact !important;
   }
 
-  :root {
+  :root, .dark {
+    --color-surface: #ffffff;
+    --color-surface-secondary: #f5f5f5;
+    --color-ink: #1a1a1a;
     background-color: white !important;
     color: black !important;
   }
@@ -80,10 +114,11 @@ body {
     width: 12px !important;
     height: 12px !important;
     border-width: 1px !important;
+    border-color: #1a1a1a !important;
   }
 
   .dot.filled {
-    background-color: #2c1810 !important;
+    background-color: #1a1a1a !important;
   }
 
   .tab-content > div {
@@ -129,6 +164,7 @@ body {
     background-color: white !important;
     padding: 2px 4px !important;
     font-size: 10pt !important;
+    color: black !important;
   }
 
   /* Заголовки */
@@ -183,41 +219,97 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #d4c49c;
+  background: var(--color-surface-secondary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8b7355;
+  background: rgba(26, 26, 26, 0.4);
   border-radius: 4px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(229, 229, 229, 0.4);
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b5445;
+  background: rgba(26, 26, 26, 0.6);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(229, 229, 229, 0.6);
 }
 
 /* Input styles */
 input[type="text"],
 input[type="number"],
-textarea {
-  @apply bg-parchment border border-ink/30 rounded px-2 py-1 focus:outline-none focus:border-ink transition-colors;
+textarea,
+select {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(26, 26, 26, 0.3);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  color: var(--color-ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.dark input[type="text"],
+.dark input[type="number"],
+.dark textarea,
+.dark select {
+  border-color: rgba(229, 229, 229, 0.3);
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
-textarea:focus {
-  @apply ring-1 ring-ink/50;
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-ink);
+  box-shadow: 0 0 0 1px rgba(26, 26, 26, 0.5);
+}
+
+.dark input[type="text"]:focus,
+.dark input[type="number"]:focus,
+.dark textarea:focus,
+.dark select:focus {
+  box-shadow: 0 0 0 1px rgba(229, 229, 229, 0.5);
 }
 
 /* Button styles */
 .btn {
-  @apply px-4 py-2 bg-ink text-parchment rounded hover:bg-ink/80 transition-colors cursor-pointer;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-ink);
+  color: var(--color-surface);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  border: none;
+}
+
+.btn:hover {
+  opacity: 0.8;
 }
 
 .btn-secondary {
-  @apply px-4 py-2 bg-parchment-dark text-ink border border-ink rounded hover:bg-parchment transition-colors cursor-pointer;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-surface-secondary);
+  color: var(--color-ink);
+  border: 1px solid rgba(26, 26, 26, 0.3);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.dark .btn-secondary {
+  border-color: rgba(229, 229, 229, 0.3);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-surface);
 }
 
 .btn-small {
-  @apply px-2 py-1 text-sm;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
 }

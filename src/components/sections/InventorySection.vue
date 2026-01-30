@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
+import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
@@ -54,8 +55,8 @@ function saveExplanation(explanation: string) {
   <div class="inventory-section">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Блок 1: Артефакты -->
-      <div class="artifacts-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Артефакты</h3>
+      <div class="artifacts-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Артефакты</h3>
         
         <div class="space-y-2">
           <div
@@ -68,14 +69,11 @@ function saveExplanation(explanation: string) {
               type="text"
               class="flex-1 text-sm min-w-[100px]"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="artifact.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="artifact.explanation || ''"
+              :has-explanation="!!artifact.explanation"
               @click="openExplanation('artifacts', index)"
-            >
-              ?
-            </button>
+            />
             <DotStrip
               v-model="artifact.value"
               :max="5"
@@ -85,8 +83,8 @@ function saveExplanation(explanation: string) {
       </div>
       
       <!-- Блок 2: Снаряжение -->
-      <div class="equipment-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Снаряжение</h3>
+      <div class="equipment-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Снаряжение</h3>
         
         <div class="space-y-2">
           <div
@@ -99,14 +97,11 @@ function saveExplanation(explanation: string) {
               type="text"
               class="flex-1 text-sm min-w-[100px]"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="item.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="item.explanation || ''"
+              :has-explanation="!!item.explanation"
               @click="openExplanation('equipment', index)"
-            >
-              ?
-            </button>
+            />
             <DotStrip
               v-model="item.value"
               :max="5"
@@ -116,12 +111,12 @@ function saveExplanation(explanation: string) {
       </div>
       
       <!-- Блок 3: Расходники -->
-      <div class="consumables-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Расходники</h3>
+      <div class="consumables-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Расходники</h3>
         
         <!-- Обычные -->
         <div class="mb-4">
-          <h4 class="text-sm font-semibold mb-2 text-ink/70">Обычные</h4>
+          <h4 class="text-sm font-semibold mb-2 opacity-70">Обычные</h4>
           <div class="space-y-2">
             <div
               v-for="(item, index) in character.consumables.regular"
@@ -133,14 +128,11 @@ function saveExplanation(explanation: string) {
                 type="text"
                 class="flex-1 text-sm min-w-[80px]"
               />
-              <button
-                type="button"
-                class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-                :class="item.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+              <ExplanationTooltip
+                :explanation="item.explanation || ''"
+                :has-explanation="!!item.explanation"
                 @click="openExplanation('regular', index)"
-              >
-                ?
-              </button>
+              />
               <DotStrip
                 v-model="item.value"
                 :max="9"
@@ -151,7 +143,7 @@ function saveExplanation(explanation: string) {
         
         <!-- Магические -->
         <div>
-          <h4 class="text-sm font-semibold mb-2 text-ink/70">Магические</h4>
+          <h4 class="text-sm font-semibold mb-2 opacity-70">Магические</h4>
           <div class="space-y-2">
             <div
               v-for="(item, index) in character.consumables.magical"
@@ -163,14 +155,11 @@ function saveExplanation(explanation: string) {
                 type="text"
                 class="flex-1 text-sm min-w-[80px]"
               />
-              <button
-                type="button"
-                class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-                :class="item.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+              <ExplanationTooltip
+                :explanation="item.explanation || ''"
+                :has-explanation="!!item.explanation"
                 @click="openExplanation('magical', index)"
-              >
-                ?
-              </button>
+              />
               <DotStrip
                 v-model="item.value"
                 :max="9"

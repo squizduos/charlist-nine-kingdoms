@@ -10,11 +10,14 @@ export const useCharacterStore = defineStore('character', () => {
   // Состояние персонажа
   const character = ref<Character>(createEmptyCharacter())
 
-  // Computed: максимум здоровья = храбрость + телосложение
-  const healthMax = computed(() =>
+  // Computed: базовый максимум здоровья = храбрость + телосложение (для полоски точек)
+  const healthMaxBase = computed(() =>
     character.value.attributes.social.courage +
     character.value.attributes.physical.constitution
   )
+  
+  // Computed: отображаемый максимум здоровья = (храбрость + телосложение)²
+  const healthMax = computed(() => healthMaxBase.value * healthMaxBase.value)
 
   // Сохранение в localStorage
   function saveToLocalStorage() {
@@ -109,6 +112,7 @@ export const useCharacterStore = defineStore('character', () => {
 
   return {
     character,
+    healthMaxBase,
     healthMax,
     saveToLocalStorage,
     loadFromLocalStorage,

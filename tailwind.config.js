@@ -4,16 +4,16 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        'parchment': '#f4e4bc',
-        'parchment-dark': '#d4c49c',
-        'ink': '#2c1810',
-        'blood': '#8b0000',
-      },
       fontFamily: {
         'medieval': ['Georgia', 'Times New Roman', 'serif'],
+      },
+      colors: {
+        'ink': 'var(--color-ink)',
+        'surface': 'var(--color-surface)',
+        'surface-secondary': 'var(--color-surface-secondary)',
       }
     },
   },

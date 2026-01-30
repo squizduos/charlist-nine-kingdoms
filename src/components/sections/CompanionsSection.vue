@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useCharacterStore } from '../../stores/character'
 import ExplanationModal from '../ui/ExplanationModal.vue'
+import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
@@ -39,16 +40,17 @@ function saveExplanation(explanation: string) {
       <div
         v-for="(companion, index) in character.companions"
         :key="index"
-        class="companion-block bg-parchment-dark/20 rounded-lg p-4"
+        class="companion-block rounded-lg p-4"
+        style="background-color: var(--color-surface-secondary);"
       >
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">
           Спутник {{ index + 1 }}
         </h3>
         
         <div class="space-y-3">
           <!-- Имя -->
           <div>
-            <label class="text-xs text-ink/70">Имя</label>
+            <label class="text-xs opacity-70">Имя</label>
             <input
               v-model="companion.name"
               type="text"
@@ -58,7 +60,7 @@ function saveExplanation(explanation: string) {
           
           <!-- Уровень -->
           <div>
-            <label class="text-xs text-ink/70">Уровень</label>
+            <label class="text-xs opacity-70">Уровень</label>
             <input
               v-model.number="companion.level"
               type="number"
@@ -69,18 +71,19 @@ function saveExplanation(explanation: string) {
           
           <!-- Здоровье (вычисляемое) -->
           <div>
-            <label class="text-xs text-ink/70">Здоровье (Уровень × 2)</label>
+            <label class="text-xs opacity-70">Здоровье (Уровень × 2)</label>
             <input
               :value="getCompanionHealth(companion.level)"
               type="number"
-              class="w-full bg-parchment-dark/50 cursor-not-allowed"
+              class="w-full cursor-not-allowed"
+              style="background-color: var(--color-surface-secondary); opacity: 0.7;"
               disabled
             />
           </div>
           
           <!-- Урон -->
           <div>
-            <label class="text-xs text-ink/70">Урон</label>
+            <label class="text-xs opacity-70">Урон</label>
             <input
               v-model.number="companion.damage"
               type="number"
@@ -90,7 +93,7 @@ function saveExplanation(explanation: string) {
           
           <!-- Симпатия -->
           <div>
-            <label class="text-xs text-ink/70">Симпатия</label>
+            <label class="text-xs opacity-70">Симпатия</label>
             <input
               v-model.number="companion.sympathy"
               type="number"
@@ -99,8 +102,8 @@ function saveExplanation(explanation: string) {
           </div>
           
           <!-- 7 текстовых полей для способностей -->
-          <div class="pt-2 border-t border-ink/20">
-            <label class="text-xs text-ink/70 mb-1 block">Способности</label>
+          <div class="pt-2" style="border-top: 1px solid rgba(128,128,128,0.2);">
+            <label class="text-xs opacity-70 mb-1 block">Способности</label>
             <div class="space-y-1">
               <div
                 v-for="(ability, abilityIndex) in companion.abilities"
@@ -112,15 +115,11 @@ function saveExplanation(explanation: string) {
                   type="text"
                   class="flex-1 text-sm"
                 />
-                <button
-                  type="button"
-                  class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-                  :class="ability.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
-                  :title="ability.explanation ? 'Редактировать пояснение' : 'Добавить пояснение'"
+                <ExplanationTooltip
+                  :explanation="ability.explanation || ''"
+                  :has-explanation="!!ability.explanation"
                   @click="openExplanation(index, abilityIndex)"
-                >
-                  ?
-                </button>
+                />
               </div>
             </div>
           </div>

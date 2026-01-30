@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
+import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
@@ -49,8 +50,8 @@ function saveExplanation(explanation: string) {
   <div class="connections-section">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Блок 1: Проклятия -->
-      <div class="curses-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Проклятия</h3>
+      <div class="curses-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Проклятия</h3>
         
         <div class="space-y-2">
           <div
@@ -63,14 +64,11 @@ function saveExplanation(explanation: string) {
               type="text"
               class="flex-1 text-sm min-w-[100px]"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="curse.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="curse.explanation || ''"
+              :has-explanation="!!curse.explanation"
               @click="openExplanation('curses', index)"
-            >
-              ?
-            </button>
+            />
             <DotStrip
               v-model="curse.value"
               :max="5"
@@ -80,8 +78,8 @@ function saveExplanation(explanation: string) {
       </div>
       
       <!-- Блок 2: Социальные связи -->
-      <div class="social-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Социальные связи</h3>
+      <div class="social-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Социальные связи</h3>
         
         <div class="space-y-2">
           <div
@@ -94,14 +92,11 @@ function saveExplanation(explanation: string) {
               type="text"
               class="flex-1 text-sm min-w-[100px]"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="connection.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="connection.explanation || ''"
+              :has-explanation="!!connection.explanation"
               @click="openExplanation('connections', index)"
-            >
-              ?
-            </button>
+            />
             <DotStrip
               v-model="connection.value"
               :max="5"
@@ -111,8 +106,8 @@ function saveExplanation(explanation: string) {
       </div>
       
       <!-- Блок 3: Особенности -->
-      <div class="features-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Особенности</h3>
+      <div class="features-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Особенности</h3>
         
         <div class="space-y-2">
           <div
@@ -125,14 +120,11 @@ function saveExplanation(explanation: string) {
               type="text"
               class="flex-1 text-sm min-w-[100px]"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="feature.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="feature.explanation || ''"
+              :has-explanation="!!feature.explanation"
               @click="openExplanation('features', index)"
-            >
-              ?
-            </button>
+            />
             <DotStrip
               v-model="feature.value"
               :max="5"

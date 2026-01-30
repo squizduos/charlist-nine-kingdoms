@@ -5,8 +5,10 @@ const props = withDefaults(defineProps<{
   max: number
   modelValue: number
   disabled?: boolean
+  showValue?: boolean
 }>(), {
-  disabled: false
+  disabled: false,
+  showValue: true
 })
 
 const emit = defineEmits<{
@@ -126,10 +128,5 @@ function handleKeydown(e: KeyboardEvent) {
         OK
       </button>
     </div>
-    
-    <!-- Текущее значение -->
-    <span class="text-sm text-ink/70 min-w-[3rem] text-center">
-      {{ modelValue }}
-    </span>
   </div>
 </template>

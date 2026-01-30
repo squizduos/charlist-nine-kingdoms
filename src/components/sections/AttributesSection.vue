@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
+import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
@@ -31,8 +32,8 @@ const socialAttributes = [
   { key: 'charisma', label: 'Харизма' },
   { key: 'manipulation', label: 'Манипулирование' },
   { key: 'insight', label: 'Проницательность' },
-  { key: 'courage', label: 'Храбрость' },
   { key: 'deception', label: 'Обман' },
+  { key: 'courage', label: 'Храбрость' },
 ] as const
 
 const mentalAttributes = [
@@ -56,8 +57,8 @@ const physicalAttributes = [
   <div class="attributes-section">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Социальные атрибуты -->
-      <div class="attribute-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Социальные</h3>
+      <div class="attribute-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Социальные</h3>
         
         <div class="space-y-2 mb-4">
           <div
@@ -73,7 +74,7 @@ const physicalAttributes = [
           </div>
         </div>
         
-        <h4 class="text-sm font-semibold mb-2 text-ink/70">Специализации</h4>
+        <h4 class="text-sm font-semibold mb-2 opacity-70">Специализации</h4>
         <div class="space-y-1">
           <div
             v-for="(spec, index) in character.attributes.social.specializations"
@@ -85,21 +86,18 @@ const physicalAttributes = [
               type="text"
               class="flex-1 text-sm"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="spec.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="spec.explanation"
+              :has-explanation="!!spec.explanation"
               @click="openExplanation('social', index)"
-            >
-              ?
-            </button>
+            />
           </div>
         </div>
       </div>
       
       <!-- Ментальные атрибуты -->
-      <div class="attribute-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Ментальные</h3>
+      <div class="attribute-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Ментальные</h3>
         
         <div class="space-y-2 mb-4">
           <div
@@ -115,7 +113,7 @@ const physicalAttributes = [
           </div>
         </div>
         
-        <h4 class="text-sm font-semibold mb-2 text-ink/70">Специализации</h4>
+        <h4 class="text-sm font-semibold mb-2 opacity-70">Специализации</h4>
         <div class="space-y-1">
           <div
             v-for="(spec, index) in character.attributes.mental.specializations"
@@ -127,21 +125,18 @@ const physicalAttributes = [
               type="text"
               class="flex-1 text-sm"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="spec.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="spec.explanation"
+              :has-explanation="!!spec.explanation"
               @click="openExplanation('mental', index)"
-            >
-              ?
-            </button>
+            />
           </div>
         </div>
       </div>
       
       <!-- Физические атрибуты -->
-      <div class="attribute-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Физические</h3>
+      <div class="attribute-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Физические</h3>
         
         <div class="space-y-2 mb-4">
           <div
@@ -157,7 +152,7 @@ const physicalAttributes = [
           </div>
         </div>
         
-        <h4 class="text-sm font-semibold mb-2 text-ink/70">Специализации</h4>
+        <h4 class="text-sm font-semibold mb-2 opacity-70">Специализации</h4>
         <div class="space-y-1">
           <div
             v-for="(spec, index) in character.attributes.physical.specializations"
@@ -169,14 +164,11 @@ const physicalAttributes = [
               type="text"
               class="flex-1 text-sm"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="spec.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="spec.explanation"
+              :has-explanation="!!spec.explanation"
               @click="openExplanation('physical', index)"
-            >
-              ?
-            </button>
+            />
           </div>
         </div>
       </div>

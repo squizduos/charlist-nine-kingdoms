@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
+import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
@@ -38,8 +39,8 @@ function saveExplanation(explanation: string) {
   <div class="arts-section">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Блок 1: Искусства -->
-      <div class="arts-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Искусства</h3>
+      <div class="arts-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Искусства</h3>
         
         <div class="space-y-2">
           <div
@@ -52,14 +53,11 @@ function saveExplanation(explanation: string) {
               type="text"
               class="flex-1 text-sm min-w-[120px]"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="art.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="art.explanation || ''"
+              :has-explanation="!!art.explanation"
               @click="openExplanation('arts', index)"
-            >
-              ?
-            </button>
+            />
             <DotStrip
               v-model="art.value"
               :max="5"
@@ -69,8 +67,8 @@ function saveExplanation(explanation: string) {
       </div>
       
       <!-- Блок 2: Права рождения -->
-      <div class="birthrights-block">
-        <h3 class="text-lg font-bold mb-3 border-b border-ink/30 pb-1">Права рождения</h3>
+      <div class="birthrights-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Права рождения</h3>
         
         <div class="space-y-2">
           <div
@@ -83,14 +81,11 @@ function saveExplanation(explanation: string) {
               type="text"
               class="flex-1 text-sm min-w-[120px]"
             />
-            <button
-              type="button"
-              class="w-5 h-5 text-xs rounded-full flex items-center justify-center no-print"
-              :class="birthright.explanation ? 'bg-ink text-parchment' : 'bg-ink/10 hover:bg-ink/20'"
+            <ExplanationTooltip
+              :explanation="birthright.explanation || ''"
+              :has-explanation="!!birthright.explanation"
               @click="openExplanation('birthrights', index)"
-            >
-              ?
-            </button>
+            />
             <DotStrip
               v-model="birthright.value"
               :max="5"

@@ -200,7 +200,7 @@ export function createEmptyCharacter(): Character {
     },
 
     mind: {
-      permanentWill: 0,
+      permanentWill: 2,
       rerolls: 0,
       nightmares: 0,
       kingdoms: Array.from({ length: 10 }, () => 0),
