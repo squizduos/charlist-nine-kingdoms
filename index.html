@@ -1,31 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Character Sheets</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <!-- Global Controls -->
-    <div class="global-controls">
-      <button id="new-character" class="control-button">Новый персонаж</button>
-      <button id="import-data" class="control-button">Импорт</button>
-      <button id="export-data" class="control-button">Экспорт</button>
-      <button id="print-character" class="control-button">Печать</button>
-      <input type="file" id="file-input" accept=".json" style="display: none;">
-    </div>
-
-    <!-- Character Tabs -->
-    <div class="character-tabs">
-      <!-- Character tabs will be dynamically generated here -->
-    </div>
-
-    <!-- Character Sheets Container -->
-    <div class="character-sheets-container">
-      <!-- Character sheets will be dynamically generated here -->
-    </div>
-
-    <script src="script.js"></script>
-  </body>
+    <title>Nine Kingdoms Character Sheets</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+</body>
 </html>

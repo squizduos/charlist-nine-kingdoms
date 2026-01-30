@@ -1,0 +1,102 @@
+kind: pipeline
+type: docker
+name: build-and-deploy
+
+trigger:
+  branch:
+    - master
+    - main
+  event:
+    - push
+    - tag
+
+steps:
+  - name: install
+    image: node:20-alpine
+    commands:
+      - npm ci
+
+  - name: build
+    image: node:20-alpine
+    commands:
+      - npm run build
+    depends_on:
+      - install
+
+  - name: docker-build-push
+    image: plugins/docker
+    settings:
+      repo: ${DRONE_REPO_OWNER}/${DRONE_REPO_NAME}
+      tags:
+        - latest
+        - ${DRONE_COMMIT_SHA:0:8}
+      dockerfile: Dockerfile
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    depends_on:
+      - build
+    when:
+      event:
+        - push
+        - tag
+
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: deploy_host
+      username:
+        from_secret: deploy_username
+      key:
+        from_secret: deploy_ssh_key
+      port: 22
+      script:
+        - docker pull ${DRONE_REPO_OWNER}/${DRONE_REPO_NAME}:latest
+        - docker stop charlist-nine-kingdoms || true
+        - docker rm charlist-nine-kingdoms || true
+        - docker run -d --name charlist-nine-kingdoms -p 80:80 --restart unless-stopped ${DRONE_REPO_OWNER}/${DRONE_REPO_NAME}:latest
+    depends_on:
+      - docker-build-push
+    when:
+      branch:
+        - master
+        - main
+      event:
+        - push
+
+---
+kind: secret
+name: docker_username
+get:
+  path: secrets/docker
+  name: username
+
+---
+kind: secret
+name: docker_password
+get:
+  path: secrets/docker
+  name: password
+
+---
+kind: secret
+name: deploy_host
+get:
+  path: secrets/deploy
+  name: host
+
+---
+kind: secret
+name: deploy_username
+get:
+  path: secrets/deploy
+  name: username
+
+---
+kind: secret
+name: deploy_ssh_key
+get:
+  path: secrets/deploy
+  name: ssh_key
