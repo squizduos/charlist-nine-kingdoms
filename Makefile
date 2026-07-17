@@ -4,14 +4,14 @@
 
 # Конфигурация
 IMAGE_NAME ?= charlist-nine-kingdoms
-IMAGE_TAG ?= latest
+IMAGE_TAG ?= 0.1.0
 REGISTRY ?= docker.io
-REGISTRY_USER ?= $(shell whoami)
+REGISTRY_USER ?= squizduos
 FULL_IMAGE_NAME = $(REGISTRY)/$(REGISTRY_USER)/$(IMAGE_NAME):$(IMAGE_TAG)
 
 # Порты
 DEV_PORT ?= 5173
-PROD_PORT ?= 8080
+PROD_PORT ?= 80
 
 # =============================================================================
 # Разработка

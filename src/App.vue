@@ -45,7 +45,7 @@ const sectionTabs = [
     <!-- Футер -->
     <footer class="mt-8 py-4 text-center text-xs opacity-60 no-print" style="border-top: 1px solid rgba(128,128,128,0.2);">
       <div class="flex flex-wrap items-center justify-center gap-4">
-        <span>Версия 1.0.0</span>
+        <span>Версия 0.1.0</span>
         <span>•</span>
         <span>Разработчик: Semyon Bochkaryov</span>
         <span>•</span>
