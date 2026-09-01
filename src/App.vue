@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { useCharacterStore } from './stores/character'
+import { adjustPrintScale, resetPrintScale } from './utils/printFit'
 import MainSection from './components/MainSection.vue'
 import CharacterTabs from './components/ui/CharacterTabs.vue'
 import TabContainer from './components/ui/TabContainer.vue'
@@ -11,11 +12,20 @@ import ConnectionsSection from './components/sections/ConnectionsSection.vue'
 import InventorySection from './components/sections/InventorySection.vue'
 import CompanionsSection from './components/sections/CompanionsSection.vue'
 import NotesSection from './components/sections/NotesSection.vue'
+import logoUrl from './assets/logo.png'
 
 const store = useCharacterStore()
+const appVersion = __APP_VERSION__
 
 onMounted(() => {
   store.loadFromLocalStorage()
+  window.addEventListener('beforeprint', adjustPrintScale)
+  window.addEventListener('afterprint', resetPrintScale)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('beforeprint', adjustPrintScale)
+  window.removeEventListener('afterprint', resetPrintScale)
 })
 
 const sectionTabs = [
@@ -31,8 +41,9 @@ const sectionTabs = [
 
 <template>
   <div class="min-h-screen flex flex-col">
-    <header class="text-center mb-2 print:mb-2">
-      <h1 class="text-3xl font-bold" style="color: var(--color-ink);">Девять королевств</h1>
+    <header class="flex items-center justify-center gap-3 mb-2 print:mb-2">
+      <img :src="logoUrl" alt="" class="app-logo h-9 w-auto shrink-0" />
+      <h1 class="app-title text-3xl" style="color: var(--color-ink);">Десять королевств</h1>
     </header>
     
     <!-- Вкладки персонажей -->
@@ -45,7 +56,7 @@ const sectionTabs = [
     <!-- Футер -->
     <footer class="mt-8 py-4 text-center text-xs opacity-60 no-print" style="border-top: 1px solid rgba(128,128,128,0.2);">
       <div class="flex flex-wrap items-center justify-center gap-4">
-        <span>Версия 0.1.0</span>
+        <span>Версия {{ appVersion }}</span>
         <span>•</span>
         <span>Разработчик: Semyon Bochkaryov</span>
         <span>•</span>

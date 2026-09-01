@@ -4,9 +4,15 @@ import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
 import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
+import CollapsibleFields from '../ui/CollapsibleFields.vue'
+import type { EditableParameter } from '../../types/character'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
+
+function isParamUsed(param: EditableParameter): boolean {
+  return param.value > 0 || !!param.name?.trim() || !!param.explanation?.trim()
+}
 
 // Модальное окно пояснений
 const showModal = ref(false)
@@ -54,26 +60,26 @@ function saveExplanation(explanation: string) {
         <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Проклятия</h3>
         
         <div class="space-y-2">
-          <div
-            v-for="(curse, index) in character.curses"
-            :key="index"
-            class="flex items-center gap-2"
-          >
-            <input
-              v-model="curse.name"
-              type="text"
-              class="flex-1 text-sm min-w-[100px]"
-            />
-            <ExplanationTooltip
-              :explanation="curse.explanation || ''"
-              :has-explanation="!!curse.explanation"
-              @click="openExplanation('curses', index)"
-            />
-            <DotStrip
-              v-model="curse.value"
-              :max="5"
-            />
-          </div>
+          <CollapsibleFields :items="character.curses" :is-used="isParamUsed">
+            <template #default="{ item: curse, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(curse) }">
+                <input
+                  v-model="curse.name"
+                  type="text"
+                  class="flex-1 text-sm min-w-[100px]"
+                />
+                <ExplanationTooltip
+                  :explanation="curse.explanation || ''"
+                  :has-explanation="!!curse.explanation"
+                  @click="openExplanation('curses', index)"
+                />
+                <DotStrip
+                  v-model="curse.value"
+                  :max="5"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
       
@@ -82,26 +88,26 @@ function saveExplanation(explanation: string) {
         <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Социальные связи</h3>
         
         <div class="space-y-2">
-          <div
-            v-for="(connection, index) in character.socialConnections"
-            :key="index"
-            class="flex items-center gap-2"
-          >
-            <input
-              v-model="connection.name"
-              type="text"
-              class="flex-1 text-sm min-w-[100px]"
-            />
-            <ExplanationTooltip
-              :explanation="connection.explanation || ''"
-              :has-explanation="!!connection.explanation"
-              @click="openExplanation('connections', index)"
-            />
-            <DotStrip
-              v-model="connection.value"
-              :max="5"
-            />
-          </div>
+          <CollapsibleFields :items="character.socialConnections" :is-used="isParamUsed">
+            <template #default="{ item: connection, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(connection) }">
+                <input
+                  v-model="connection.name"
+                  type="text"
+                  class="flex-1 text-sm min-w-[100px]"
+                />
+                <ExplanationTooltip
+                  :explanation="connection.explanation || ''"
+                  :has-explanation="!!connection.explanation"
+                  @click="openExplanation('connections', index)"
+                />
+                <DotStrip
+                  v-model="connection.value"
+                  :max="5"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
       
@@ -110,26 +116,26 @@ function saveExplanation(explanation: string) {
         <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Особенности</h3>
         
         <div class="space-y-2">
-          <div
-            v-for="(feature, index) in character.features"
-            :key="index"
-            class="flex items-center gap-2"
-          >
-            <input
-              v-model="feature.name"
-              type="text"
-              class="flex-1 text-sm min-w-[100px]"
-            />
-            <ExplanationTooltip
-              :explanation="feature.explanation || ''"
-              :has-explanation="!!feature.explanation"
-              @click="openExplanation('features', index)"
-            />
-            <DotStrip
-              v-model="feature.value"
-              :max="5"
-            />
-          </div>
+          <CollapsibleFields :items="character.features" :is-used="isParamUsed">
+            <template #default="{ item: feature, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(feature) }">
+                <input
+                  v-model="feature.name"
+                  type="text"
+                  class="flex-1 text-sm min-w-[100px]"
+                />
+                <ExplanationTooltip
+                  :explanation="feature.explanation || ''"
+                  :has-explanation="!!feature.explanation"
+                  @click="openExplanation('features', index)"
+                />
+                <DotStrip
+                  v-model="feature.value"
+                  :max="5"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
     </div>

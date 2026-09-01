@@ -6,9 +6,11 @@ const props = withDefaults(defineProps<{
   modelValue: number
   disabled?: boolean
   showValue?: boolean
+  showDelta?: boolean
 }>(), {
   disabled: false,
-  showValue: true
+  showValue: true,
+  showDelta: true
 })
 
 const emit = defineEmits<{
@@ -110,7 +112,7 @@ function handleKeydown(e: KeyboardEvent) {
     </div>
     
     <!-- Поле для быстрого изменения -->
-    <div class="flex items-center gap-1 no-print">
+    <div v-if="showDelta" class="flex items-center gap-1 no-print">
       <input
         v-model="deltaInput"
         type="text"

@@ -86,6 +86,7 @@ export interface Mind {
   permanentWill: number
   rerolls: number
   nightmares: number
+  bedlams: number
   // Для типа "Материк"
   kingdoms: number[] // 10 значений
   // Для типа "Фэйри"
@@ -113,9 +114,12 @@ export interface Character {
   age: string
   sheetType: CharacterSheetType
   experience: number // 0-15
-  health: number // Сложный, зависит от храбрости + телосложения
+  experienceExplanation: string
+  health: number // Сложный, зависит от храбрости + телосложения (в интерфейсе - "Урон")
+  healthExplanation: string
   injuries: Injuries
   wealth: number
+  wealthExplanation: string
 
   // Секция I: Атрибуты
   attributes: Attributes
@@ -168,7 +172,9 @@ export function createEmptyCharacter(): Character {
     age: '',
     sheetType: 'mainland',
     experience: 0,
+    experienceExplanation: '',
     health: 0,
+    healthExplanation: '',
     injuries: {
       head: false,
       body: false,
@@ -178,6 +184,7 @@ export function createEmptyCharacter(): Character {
       rightLeg: false,
     },
     wealth: 0,
+    wealthExplanation: '',
 
     attributes: {
       social: {
@@ -210,6 +217,7 @@ export function createEmptyCharacter(): Character {
       permanentWill: 2,
       rerolls: 0,
       nightmares: 0,
+      bedlams: 0,
       kingdoms: Array.from({ length: 10 }, () => 0),
       glamour: 0,
       banality: 0,

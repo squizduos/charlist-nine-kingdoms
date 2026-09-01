@@ -4,9 +4,47 @@ import { useCharacterStore } from '../stores/character'
 import ExperienceGrid from './ui/ExperienceGrid.vue'
 import DotStripComplex from './ui/DotStripComplex.vue'
 import InjuryFigure from './ui/InjuryFigure.vue'
+import ExplanationTooltip from './ui/ExplanationTooltip.vue'
+import ExplanationModal from './ui/ExplanationModal.vue'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
+
+// Заметки к полям Опыт/Урон/Богатство
+type QuickNoteField = 'experience' | 'health' | 'wealth'
+
+const quickNoteTitles: Record<QuickNoteField, string> = {
+  experience: 'Опыт',
+  health: 'Урон',
+  wealth: 'Богатство',
+}
+
+const showQuickNoteModal = ref(false)
+const quickNoteField = ref<QuickNoteField>('experience')
+const quickNoteExplanation = ref('')
+
+function openQuickNote(field: QuickNoteField) {
+  quickNoteField.value = field
+  quickNoteExplanation.value =
+    field === 'experience' ? character.value.experienceExplanation
+    : field === 'health' ? character.value.healthExplanation
+    : character.value.wealthExplanation
+  showQuickNoteModal.value = true
+}
+
+function saveQuickNote(explanation: string) {
+  switch (quickNoteField.value) {
+    case 'experience':
+      character.value.experienceExplanation = explanation
+      break
+    case 'health':
+      character.value.healthExplanation = explanation
+      break
+    case 'wealth':
+      character.value.wealthExplanation = explanation
+      break
+  }
+}
 
 // Тема
 const isDarkTheme = ref(false)
@@ -28,6 +66,40 @@ function toggleTheme() {
   } else {
     document.documentElement.classList.remove('dark')
     localStorage.setItem('nine-kingdoms-theme', 'light')
+  }
+}
+
+// Быстрое изменение богатства
+const wealthDeltaInput = ref<string>('')
+
+function applyWealthDelta() {
+  const delta = parseInt(wealthDeltaInput.value, 10)
+  if (!isNaN(delta)) {
+    character.value.wealth += delta
+    wealthDeltaInput.value = ''
+  }
+}
+
+function handleWealthDeltaKeydown(e: KeyboardEvent) {
+  if (e.key === 'Enter') {
+    applyWealthDelta()
+  }
+}
+
+// Быстрое изменение урона
+const healthDeltaInput = ref<string>('')
+
+function applyHealthDelta() {
+  const delta = parseInt(healthDeltaInput.value, 10)
+  if (!isNaN(delta)) {
+    character.value.health = Math.max(0, character.value.health + delta)
+    healthDeltaInput.value = ''
+  }
+}
+
+function handleHealthDeltaKeydown(e: KeyboardEvent) {
+  if (e.key === 'Enter') {
+    applyHealthDelta()
   }
 }
 
@@ -93,10 +165,10 @@ function handlePrint() {
 
 <template>
   <div class="main-section rounded-lg p-4 print:bg-transparent print:p-0" style="background-color: var(--color-surface-secondary);">
-    <!-- Основная компоновка -->
-    <div class="flex flex-wrap gap-4 items-stretch">
-      <!-- Колонка 1: Имя персонажа, Имя игрока, Раса -->
-      <div class="flex flex-col gap-2 min-w-[180px] flex-1">
+    <!-- Основная компоновка: фиксированные пропорции колонок 25-25-10-30-10% -->
+    <div class="flex flex-wrap md:flex-nowrap gap-4 items-stretch">
+      <!-- Колонка 1 (25%): Имя персонажа, Имя игрока, Раса -->
+      <div class="flex flex-col gap-2 w-full md:w-[25%]">
         <div>
           <label class="text-xs opacity-70">Имя персонажа</label>
           <input
@@ -123,8 +195,8 @@ function handlePrint() {
         </div>
       </div>
       
-      <!-- Колонка 2: Концепция, Возраст, Тип -->
-      <div class="flex flex-col gap-2 min-w-[180px] flex-1">
+      <!-- Колонка 2 (25%): Концепция, Возраст, Тип -->
+      <div class="flex flex-col gap-2 w-full md:w-[25%]">
         <div>
           <label class="text-xs opacity-70">Концепция</label>
           <input
@@ -153,46 +225,106 @@ function handlePrint() {
         </div>
       </div>
       
-      <!-- Колонка 3: Опыт -->
-      <div class="flex flex-col min-w-[140px]">
-        <label class="text-xs opacity-70">Опыт</label>
+      <!-- Колонка 3 (10%): Опыт -->
+      <div class="flex flex-col w-full md:w-[10%]">
+        <div class="flex items-center gap-1">
+          <label class="text-xs opacity-70">Опыт</label>
+          <ExplanationTooltip
+            :explanation="character.experienceExplanation || ''"
+            :has-explanation="!!character.experienceExplanation"
+            @click="openQuickNote('experience')"
+          />
+        </div>
         <div class="mt-1">
           <ExperienceGrid v-model="character.experience" />
         </div>
       </div>
-      
-      <!-- Колонка 4: Здоровье + Богатство -->
-      <div class="flex flex-col gap-2 min-w-[180px]">
+
+      <!-- Колонка 4 (30%): Здоровье + Богатство -->
+      <div class="flex flex-col gap-2 w-full md:w-[30%]">
         <!-- Здоровье -->
         <div>
           <div class="flex items-center justify-between gap-2 mb-1">
             <div>
-              <label class="text-xs opacity-70">Здоровье</label>
+              <div class="flex items-center gap-1">
+                <label class="text-xs opacity-70">Урон</label>
+                <ExplanationTooltip
+                  :explanation="character.healthExplanation || ''"
+                  :has-explanation="!!character.healthExplanation"
+                  @click="openQuickNote('health')"
+                />
+              </div>
               <div class="text-xs opacity-50">
-                Макс: {{ store.healthMax }} = ({{ store.healthMaxBase }})²
+                Максимальное здоровье: {{ store.healthMax }} = ({{ store.healthMaxBase }})²
               </div>
             </div>
             <span class="text-lg font-bold opacity-80">{{ character.health }}</span>
           </div>
-          <DotStripComplex
-            v-model="character.health"
-            :max="Math.max(1, store.healthMaxBase)"
-          />
+          <div class="flex gap-2">
+            <div class="w-[70%]">
+              <DotStripComplex
+                v-model="character.health"
+                :max="Math.max(1, store.healthMaxBase)"
+                :show-delta="false"
+              />
+            </div>
+            <div class="flex items-center gap-1 w-[30%] no-print">
+              <input
+                v-model="healthDeltaInput"
+                type="text"
+                class="w-full min-w-0 text-center text-sm"
+                placeholder="+/-"
+                @keydown="handleHealthDeltaKeydown"
+              />
+              <button
+                type="button"
+                class="btn-secondary btn-small shrink-0"
+                @click="applyHealthDelta"
+              >
+                OK
+              </button>
+            </div>
+          </div>
         </div>
-        
+
         <!-- Богатство -->
         <div>
-          <label class="text-xs opacity-70">Богатство</label>
-          <input
-            v-model.number="character.wealth"
-            type="number"
-            class="w-full"
-          />
+          <div class="flex items-center gap-1">
+            <label class="text-xs opacity-70">Богатство</label>
+            <ExplanationTooltip
+              :explanation="character.wealthExplanation || ''"
+              :has-explanation="!!character.wealthExplanation"
+              @click="openQuickNote('wealth')"
+            />
+          </div>
+          <div class="flex gap-2">
+            <input
+              v-model.number="character.wealth"
+              type="number"
+              class="w-[70%]"
+            />
+            <div class="flex items-center gap-1 w-[30%] no-print">
+              <input
+                v-model="wealthDeltaInput"
+                type="text"
+                class="w-full min-w-0 text-center text-sm"
+                placeholder="+/-"
+                @keydown="handleWealthDeltaKeydown"
+              />
+              <button
+                type="button"
+                class="btn-secondary btn-small shrink-0"
+                @click="applyWealthDelta"
+              >
+                OK
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       
-      <!-- Колонка 5: Увечья -->
-      <div class="flex items-center justify-center p-3 rounded-lg" style="background-color: var(--color-surface); border: 1px solid rgba(128,128,128,0.3);">
+      <!-- Колонка 5 (10%): Увечья -->
+      <div class="flex items-center justify-center p-3 rounded-lg w-full md:w-[10%]" style="background-color: var(--color-surface); border: 1px solid rgba(128,128,128,0.3);">
         <InjuryFigure v-model="character.injuries" />
       </div>
     </div>
@@ -263,5 +395,13 @@ function handlePrint() {
         </div>
       </div>
     </div>
+
+    <!-- Модальное окно заметок к Опыту/Урону/Богатству -->
+    <ExplanationModal
+      v-model="showQuickNoteModal"
+      :title="quickNoteTitles[quickNoteField]"
+      :explanation="quickNoteExplanation"
+      @update:explanation="saveQuickNote"
+    />
   </div>
 </template>

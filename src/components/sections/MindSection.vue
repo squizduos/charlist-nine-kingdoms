@@ -3,6 +3,7 @@ import { computed, watch } from 'vue'
 import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import DotStripComplex from '../ui/DotStripComplex.vue'
+import NightmaresTrack from '../ui/NightmaresTrack.vue'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
@@ -11,6 +12,7 @@ const character = computed(() => store.character)
 const nightmaresMax = computed(() => Math.max(1, 10 - character.value.mind.permanentWill))
 
 // Ограничение постоянной воли: минимум 2
+// Кошмары и Бедламы при изменении Постоянной воли НЕ пересчитываются и не сбрасываются
 watch(
   () => character.value.mind.permanentWill,
   (newVal) => {
@@ -20,11 +22,6 @@ watch(
     // Ограничение перебросов
     if (character.value.mind.rerolls > newVal) {
       character.value.mind.rerolls = newVal
-    }
-    // Ограничение кошмаров при изменении MAX
-    const maxNightmares = nightmaresMax.value * nightmaresMax.value + nightmaresMax.value - 1
-    if (character.value.mind.nightmares > maxNightmares) {
-      character.value.mind.nightmares = maxNightmares
     }
   }
 )
@@ -71,20 +68,21 @@ watch(
         </div>
       </div>
       
-      <!-- Блок 2: Кошмары -->
+      <!-- Блок 2: Кошмары / Бедламы -->
       <div class="nightmares-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
         <div class="flex items-center justify-between mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">
           <div>
-            <h3 class="text-lg font-bold">Кошмары</h3>
-            <div class="text-xs opacity-60">Макс: {{ nightmaresMax }} = (10 - Воля)</div>
+            <h3 class="text-lg font-bold">Кошмары / Бедламы</h3>
+            <div class="text-xs opacity-60">Кошмары, макс: {{ nightmaresMax }} = (10 - Воля) • Бедламы, макс: 10</div>
           </div>
-          <span class="text-sm opacity-70">{{ character.mind.nightmares }}</span>
+          <span class="text-sm opacity-70">{{ character.mind.nightmares }} / {{ character.mind.bedlams }}</span>
         </div>
-        
-        <DotStripComplex
-          v-model="character.mind.nightmares"
-          :max="nightmaresMax"
-          :show-value="false"
+
+        <NightmaresTrack
+          v-model:nightmares="character.mind.nightmares"
+          v-model:bedlams="character.mind.bedlams"
+          :nightmares-max="nightmaresMax"
+          :bedlams-max="10"
         />
       </div>
       

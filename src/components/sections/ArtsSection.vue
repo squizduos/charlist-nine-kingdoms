@@ -4,9 +4,15 @@ import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
 import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
+import CollapsibleFields from '../ui/CollapsibleFields.vue'
+import type { EditableParameter } from '../../types/character'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
+
+function isParamUsed(param: EditableParameter): boolean {
+  return param.value > 0 || !!param.name?.trim() || !!param.explanation?.trim()
+}
 
 // Модальное окно пояснений
 const showModal = ref(false)
@@ -43,26 +49,26 @@ function saveExplanation(explanation: string) {
         <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Искусства</h3>
         
         <div class="space-y-2">
-          <div
-            v-for="(art, index) in character.arts"
-            :key="index"
-            class="flex items-center gap-2"
-          >
-            <input
-              v-model="art.name"
-              type="text"
-              class="flex-1 text-sm min-w-[120px]"
-            />
-            <ExplanationTooltip
-              :explanation="art.explanation || ''"
-              :has-explanation="!!art.explanation"
-              @click="openExplanation('arts', index)"
-            />
-            <DotStrip
-              v-model="art.value"
-              :max="5"
-            />
-          </div>
+          <CollapsibleFields :items="character.arts" :is-used="isParamUsed">
+            <template #default="{ item: art, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(art) }">
+                <input
+                  v-model="art.name"
+                  type="text"
+                  class="flex-1 text-sm min-w-[120px]"
+                />
+                <ExplanationTooltip
+                  :explanation="art.explanation || ''"
+                  :has-explanation="!!art.explanation"
+                  @click="openExplanation('arts', index)"
+                />
+                <DotStrip
+                  v-model="art.value"
+                  :max="5"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
       
@@ -71,26 +77,26 @@ function saveExplanation(explanation: string) {
         <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Права рождения</h3>
         
         <div class="space-y-2">
-          <div
-            v-for="(birthright, index) in character.birthrights"
-            :key="index"
-            class="flex items-center gap-2"
-          >
-            <input
-              v-model="birthright.name"
-              type="text"
-              class="flex-1 text-sm min-w-[120px]"
-            />
-            <ExplanationTooltip
-              :explanation="birthright.explanation || ''"
-              :has-explanation="!!birthright.explanation"
-              @click="openExplanation('birthrights', index)"
-            />
-            <DotStrip
-              v-model="birthright.value"
-              :max="5"
-            />
-          </div>
+          <CollapsibleFields :items="character.birthrights" :is-used="isParamUsed">
+            <template #default="{ item: birthright, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(birthright) }">
+                <input
+                  v-model="birthright.name"
+                  type="text"
+                  class="flex-1 text-sm min-w-[120px]"
+                />
+                <ExplanationTooltip
+                  :explanation="birthright.explanation || ''"
+                  :has-explanation="!!birthright.explanation"
+                  @click="openExplanation('birthrights', index)"
+                />
+                <DotStrip
+                  v-model="birthright.value"
+                  :max="5"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
     </div>

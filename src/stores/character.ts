@@ -6,6 +6,17 @@ import { generateFilename } from '../utils/transliterate'
 
 const STORAGE_KEY = 'nine-kingdoms-tabs'
 
+// Глубокий мердж персонажа с пустым шаблоном (top-level поля-объекты мержатся отдельно,
+// чтобы новые вложенные поля из createEmptyCharacter() не терялись при загрузке старых сохранений)
+function mergeWithEmptyCharacter(partial: Partial<Character>): Character {
+  const empty = createEmptyCharacter()
+  return {
+    ...empty,
+    ...partial,
+    mind: { ...empty.mind, ...partial.mind },
+  }
+}
+
 // Генерация уникального ID
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).substring(2)
@@ -121,7 +132,7 @@ export const useCharacterStore = defineStore('character', () => {
           // Мержим каждого персонажа с пустым для обеспечения всех полей
           tabs.value = data.tabs.map((tab: CharacterTab) => ({
             ...tab,
-            character: { ...createEmptyCharacter(), ...tab.character }
+            character: mergeWithEmptyCharacter(tab.character)
           }))
           activeTabId.value = data.activeTabId || tabs.value[0].id
         } else {
@@ -133,7 +144,7 @@ export const useCharacterStore = defineStore('character', () => {
         const oldJson = localStorage.getItem('nine-kingdoms-character')
         if (oldJson) {
           const oldCharacter = JSON.parse(oldJson) as Partial<Character>
-          const character = { ...createEmptyCharacter(), ...oldCharacter }
+          const character = mergeWithEmptyCharacter(oldCharacter)
           const name = character.characterName || 'Персонаж'
           createTab(name, character)
           // Удаляем старый ключ
@@ -158,7 +169,7 @@ export const useCharacterStore = defineStore('character', () => {
   function importFromJSON(json: string, tabName: string = 'Загруженный'): boolean {
     try {
       const loaded = JSON.parse(json) as Partial<Character>
-      const newCharacter = { ...createEmptyCharacter(), ...loaded }
+      const newCharacter = mergeWithEmptyCharacter(loaded)
       createTab(tabName, newCharacter)
       return true
     } catch (error) {

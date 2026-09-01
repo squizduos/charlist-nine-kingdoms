@@ -5,7 +5,7 @@
 # Конфигурация
 IMAGE_NAME ?= charlist-nine-kingdoms
 IMAGE_TAG ?= 0.1.0
-REGISTRY ?= docker.io
+REGISTRY ?= ghcr.io
 REGISTRY_USER ?= squizduos
 FULL_IMAGE_NAME = $(REGISTRY)/$(REGISTRY_USER)/$(IMAGE_NAME):$(IMAGE_TAG)
 
@@ -135,7 +135,7 @@ help: ## Показать эту справку
 	@echo ""
 	@echo "Примеры:"
 	@echo "  make docker-build                          # Сборка образа"
-	@echo "  make docker-publish REGISTRY_USER=myuser   # Публикация в docker.io/myuser/..."
+	@echo "  make docker-publish REGISTRY_USER=myuser   # Публикация в ghcr.io/myuser/..."
 	@echo "  make release IMAGE_TAG=v1.0.0              # Релиз с тегом v1.0.0"
 
 .DEFAULT_GOAL := help

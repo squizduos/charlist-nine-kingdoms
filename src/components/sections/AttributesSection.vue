@@ -4,9 +4,15 @@ import { useCharacterStore } from '../../stores/character'
 import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
 import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
+import CollapsibleFields from '../ui/CollapsibleFields.vue'
+import type { Specialization } from '../../types/character'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
+
+function isSpecUsed(spec: Specialization): boolean {
+  return !!spec.name?.trim() || !!spec.explanation?.trim()
+}
 
 // Модальное окно пояснений
 const showModal = ref(false)
@@ -76,22 +82,25 @@ const physicalAttributes = [
         
         <h4 class="text-sm font-semibold mb-2 opacity-70">Специализации</h4>
         <div class="space-y-1">
-          <div
-            v-for="(spec, index) in character.attributes.social.specializations"
-            :key="index"
-            class="flex items-center gap-2"
+          <CollapsibleFields
+            :items="character.attributes.social.specializations"
+            :is-used="isSpecUsed"
           >
-            <input
-              v-model="spec.name"
-              type="text"
-              class="flex-1 text-sm"
-            />
-            <ExplanationTooltip
-              :explanation="spec.explanation"
-              :has-explanation="!!spec.explanation"
-              @click="openExplanation('social', index)"
-            />
-          </div>
+            <template #default="{ item: spec, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isSpecUsed(spec) }">
+                <input
+                  v-model="spec.name"
+                  type="text"
+                  class="flex-1 text-sm"
+                />
+                <ExplanationTooltip
+                  :explanation="spec.explanation"
+                  :has-explanation="!!spec.explanation"
+                  @click="openExplanation('social', index)"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
       
@@ -115,22 +124,25 @@ const physicalAttributes = [
         
         <h4 class="text-sm font-semibold mb-2 opacity-70">Специализации</h4>
         <div class="space-y-1">
-          <div
-            v-for="(spec, index) in character.attributes.mental.specializations"
-            :key="index"
-            class="flex items-center gap-2"
+          <CollapsibleFields
+            :items="character.attributes.mental.specializations"
+            :is-used="isSpecUsed"
           >
-            <input
-              v-model="spec.name"
-              type="text"
-              class="flex-1 text-sm"
-            />
-            <ExplanationTooltip
-              :explanation="spec.explanation"
-              :has-explanation="!!spec.explanation"
-              @click="openExplanation('mental', index)"
-            />
-          </div>
+            <template #default="{ item: spec, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isSpecUsed(spec) }">
+                <input
+                  v-model="spec.name"
+                  type="text"
+                  class="flex-1 text-sm"
+                />
+                <ExplanationTooltip
+                  :explanation="spec.explanation"
+                  :has-explanation="!!spec.explanation"
+                  @click="openExplanation('mental', index)"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
       
@@ -154,22 +166,25 @@ const physicalAttributes = [
         
         <h4 class="text-sm font-semibold mb-2 opacity-70">Специализации</h4>
         <div class="space-y-1">
-          <div
-            v-for="(spec, index) in character.attributes.physical.specializations"
-            :key="index"
-            class="flex items-center gap-2"
+          <CollapsibleFields
+            :items="character.attributes.physical.specializations"
+            :is-used="isSpecUsed"
           >
-            <input
-              v-model="spec.name"
-              type="text"
-              class="flex-1 text-sm"
-            />
-            <ExplanationTooltip
-              :explanation="spec.explanation"
-              :has-explanation="!!spec.explanation"
-              @click="openExplanation('physical', index)"
-            />
-          </div>
+            <template #default="{ item: spec, index, visible }">
+              <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isSpecUsed(spec) }">
+                <input
+                  v-model="spec.name"
+                  type="text"
+                  class="flex-1 text-sm"
+                />
+                <ExplanationTooltip
+                  :explanation="spec.explanation"
+                  :has-explanation="!!spec.explanation"
+                  @click="openExplanation('physical', index)"
+                />
+              </div>
+            </template>
+          </CollapsibleFields>
         </div>
       </div>
     </div>

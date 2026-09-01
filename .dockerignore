@@ -16,7 +16,7 @@ dist/
 .gitignore
 
 # CI/CD
-.drone.yml
+.github/
 
 # Documentation (not needed in build)
 *.md

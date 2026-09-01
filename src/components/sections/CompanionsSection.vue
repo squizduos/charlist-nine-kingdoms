@@ -3,9 +3,15 @@ import { computed, ref } from 'vue'
 import { useCharacterStore } from '../../stores/character'
 import ExplanationModal from '../ui/ExplanationModal.vue'
 import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
+import CollapsibleFields from '../ui/CollapsibleFields.vue'
+import type { CompanionAbility } from '../../types/character'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
+
+function isAbilityUsed(ability: CompanionAbility): boolean {
+  return !!ability.name?.trim() || !!ability.explanation?.trim()
+}
 
 // Вычисление здоровья спутника
 function getCompanionHealth(level: number): number {
@@ -105,22 +111,22 @@ function saveExplanation(explanation: string) {
           <div class="pt-2" style="border-top: 1px solid rgba(128,128,128,0.2);">
             <label class="text-xs opacity-70 mb-1 block">Способности</label>
             <div class="space-y-1">
-              <div
-                v-for="(ability, abilityIndex) in companion.abilities"
-                :key="abilityIndex"
-                class="flex items-center gap-2"
-              >
-                <input
-                  v-model="ability.name"
-                  type="text"
-                  class="flex-1 text-sm"
-                />
-                <ExplanationTooltip
-                  :explanation="ability.explanation || ''"
-                  :has-explanation="!!ability.explanation"
-                  @click="openExplanation(index, abilityIndex)"
-                />
-              </div>
+              <CollapsibleFields :items="companion.abilities" :is-used="isAbilityUsed">
+                <template #default="{ item: ability, index: abilityIndex, visible }">
+                  <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isAbilityUsed(ability) }">
+                    <input
+                      v-model="ability.name"
+                      type="text"
+                      class="flex-1 text-sm"
+                    />
+                    <ExplanationTooltip
+                      :explanation="ability.explanation || ''"
+                      :has-explanation="!!ability.explanation"
+                      @click="openExplanation(index, abilityIndex)"
+                    />
+                  </div>
+                </template>
+              </CollapsibleFields>
             </div>
           </div>
         </div>

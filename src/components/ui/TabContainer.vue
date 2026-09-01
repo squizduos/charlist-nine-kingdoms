@@ -38,14 +38,19 @@ function setActiveTab(tabId: string) {
     
     <!-- Содержимое вкладок -->
     <div class="tab-content">
-      <template v-for="tab in tabs" :key="tab.id">
+      <template v-for="(tab, index) in tabs" :key="tab.id">
         <div
           v-show="activeTab === tab.id"
           class="tab-panel"
-          :class="{ 'print-break': tab.id !== tabs[0]?.id }"
+          :class="{
+            // Разрыв страницы перед 'Связями' (index 3) и 'Заметками' (index 6):
+            // [Атрибуты/Рассудок/Искусства] / [Связи/Инвентарь/Спутники] / [Заметки].
+            // Индексы завязаны на порядок sectionTabs в App.vue.
+            'print-break': index === 3 || index === 6
+          }"
         >
           <!-- Заголовок для печати -->
-          <h2 class="hidden print:block text-xl font-bold mb-4">{{ tab.label }}</h2>
+          <h2 class="print-section-title hidden print:block text-xl font-bold mb-4">{{ tab.label }}</h2>
           <component :is="tab.component" />
         </div>
       </template>

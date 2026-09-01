@@ -9,6 +9,10 @@ const editingTabId = ref<string | null>(null)
 const editingName = ref('')
 const inputRef = ref<HTMLInputElement | null>(null)
 
+function setInputRef(el: Element | { $el: Element } | null) {
+  inputRef.value = (el as HTMLInputElement) ?? null
+}
+
 function startEditing(tabId: string, currentName: string) {
   editingTabId.value = tabId
   editingName.value = currentName
@@ -54,11 +58,11 @@ function handleKeydown(e: KeyboardEvent) {
         <!-- Название или поле редактирования -->
         <template v-if="editingTabId === tab.id">
           <input
-            ref="inputRef"
+            :ref="setInputRef"
             v-model="editingName"
             type="text"
-            class="bg-transparent border-none outline-none text-sm w-24 min-w-0"
-            style="color: inherit;"
+            class="border-none outline-none text-sm w-24 min-w-0"
+            style="color: inherit; background-color: transparent; box-shadow: none;"
             @blur="finishEditing"
             @keydown="handleKeydown"
             @click.stop

@@ -42,6 +42,29 @@ body {
   padding: 1rem;
 }
 
+/* Заголовок */
+.app-title {
+  font-family: 'Ruslan Display', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.app-logo {
+  /* Логотип жёлтый — на светлом фоне почти не виден, поэтому инвертируем цвет */
+  filter: invert(1);
+}
+
+.dark .app-logo {
+  filter: none;
+}
+
+@media print {
+  .app-logo {
+    filter: invert(1) !important;
+  }
+}
+
 /* Dot styles */
 .dot {
   width: 1.25rem;
@@ -73,8 +96,14 @@ body {
   background-color: rgba(229, 229, 229, 0.7);
 }
 
-/* Print styles */
+/* Print styles - компактная раскладка в стиле референсных D&D чар-листов:
+   плотная сетка, мелкий но читаемый шрифт, минимум отступов, ~3 страницы */
 @media print {
+  @page {
+    size: auto;
+    margin: 1cm;
+  }
+
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -91,11 +120,12 @@ body {
   body {
     background-color: white !important;
     min-height: auto;
+    font-size: calc(7.5pt * var(--print-scale, 1));
   }
 
   #app {
     max-width: 100%;
-    padding: 0.5cm;
+    padding: 0;
   }
 
   .no-print {
@@ -110,9 +140,62 @@ body {
     page-break-inside: avoid;
   }
 
+  /* Компактные "карточки" блоков: тонкая рамка вместо крупных отступов.
+     .main-section намеренно исключён - у него уже есть print:p-0/print:bg-transparent */
+  .rounded-lg {
+    border-radius: 3px !important;
+  }
+
+  .p-4:not(.main-section) {
+    padding: calc(4px * var(--print-scale, 1)) !important;
+  }
+
+  .p-3 {
+    padding: calc(3px * var(--print-scale, 1)) !important;
+  }
+
+  .gap-6, .gap-4 {
+    gap: calc(5px * var(--print-scale, 1)) !important;
+  }
+
+  .gap-1, .gap-2 {
+    gap: calc(2px * var(--print-scale, 1)) !important;
+  }
+
+  .mb-1, .mb-2, .mb-3, .mb-4 {
+    margin-bottom: calc(2px * var(--print-scale, 1)) !important;
+  }
+
+  .mt-1, .mt-2, .mt-4, .mt-8 {
+    margin-top: calc(2px * var(--print-scale, 1)) !important;
+  }
+
+  .pb-1 {
+    padding-bottom: calc(1px * var(--print-scale, 1)) !important;
+  }
+
+  .pt-2, .pt-4 {
+    padding-top: calc(2px * var(--print-scale, 1)) !important;
+  }
+
+  .space-y-1 > * + *,
+  .space-y-2 > * + *,
+  .space-y-3 > * + * {
+    margin-top: calc(2px * var(--print-scale, 1)) !important;
+  }
+
+  /* Фиксированная ширина колонок под подписи полей - в печати её можно сильно сжать */
+  .min-w-\[80px\],
+  .min-w-\[100px\],
+  .min-w-\[120px\],
+  .min-w-\[130px\],
+  .min-w-\[140px\] {
+    min-width: 70px !important;
+  }
+
   .dot {
-    width: 12px !important;
-    height: 12px !important;
+    width: calc(8px * var(--print-scale, 1)) !important;
+    height: calc(8px * var(--print-scale, 1)) !important;
     border-width: 1px !important;
     border-color: #1a1a1a !important;
   }
@@ -123,7 +206,7 @@ body {
 
   .tab-content > div {
     display: block !important;
-    margin-bottom: 1cm;
+    margin-bottom: calc(0.25cm * var(--print-scale, 1));
     page-break-inside: avoid;
   }
 
@@ -131,12 +214,12 @@ body {
     display: none !important;
   }
 
-  /* Показать все вкладки при печати */
+  /* Показать все вкладки при печати, каждую секцию - компактным блоком */
   .tab-panel {
     display: block !important;
     border-top: 1px solid #ccc;
-    padding-top: 0.5cm;
-    margin-top: 0.5cm;
+    padding-top: calc(0.2cm * var(--print-scale, 1));
+    margin-top: calc(0.2cm * var(--print-scale, 1));
   }
 
   .tab-panel:first-child {
@@ -145,40 +228,44 @@ body {
     margin-top: 0;
   }
 
-  /* Компактные отступы */
-  .space-y-2 > * + * {
-    margin-top: 0.25rem !important;
-  }
-
-  .space-y-3 > * + * {
-    margin-top: 0.5rem !important;
-  }
-
-  .gap-6 {
-    gap: 1rem !important;
+  /* Заголовок страницы-секции ("I. Атрибуты" и т.д.) */
+  .print-section-title {
+    border-bottom: 1.5px solid #1a1a1a !important;
+    padding-bottom: calc(2px * var(--print-scale, 1)) !important;
   }
 
   /* Поля ввода при печати */
   input, textarea, select {
     border: 1px solid #999 !important;
     background-color: white !important;
-    padding: 2px 4px !important;
-    font-size: 10pt !important;
+    padding: calc(1px * var(--print-scale, 1)) calc(3px * var(--print-scale, 1)) !important;
+    font-size: calc(7.5pt * var(--print-scale, 1)) !important;
     color: black !important;
+    min-height: 0 !important;
   }
 
-  /* Заголовки */
+  /* Типографика - единая компактная шкала вместо экранных text-* размеров.
+     --print-scale (по умолчанию 1) подставляется в JS перед печатью (см. src/utils/printFit.ts),
+     если контент не помещается в физическую страницу согласно вёрстке */
   h1 {
-    font-size: 16pt !important;
-    margin-bottom: 0.5cm !important;
+    font-size: calc(13pt * var(--print-scale, 1)) !important;
+    margin-bottom: calc(0.15cm * var(--print-scale, 1)) !important;
   }
 
-  h2 {
-    font-size: 14pt !important;
+  .text-xs {
+    font-size: calc(6.5pt * var(--print-scale, 1)) !important;
   }
 
-  h3 {
-    font-size: 12pt !important;
+  .text-sm {
+    font-size: calc(7.5pt * var(--print-scale, 1)) !important;
+  }
+
+  .text-lg {
+    font-size: calc(9pt * var(--print-scale, 1)) !important;
+  }
+
+  .text-xl {
+    font-size: calc(11pt * var(--print-scale, 1)) !important;
   }
 
   /* Сетка для печати */
@@ -198,17 +285,32 @@ body {
     .md\:grid-cols-3 {
       grid-template-columns: repeat(3, 1fr) !important;
     }
+
+    /* Верхний блок (MainSection) собран на flex+произвольных % ширины, а не grid -
+       без этого форс-фикса те же md: классы при печати не срабатывают и колонки
+       (имя/раса/концепция/опыт/урон+богатство/увечья) разваливаются в один длинный
+       столбец на всю высоту страницы */
+    .md\:flex-nowrap {
+      flex-wrap: nowrap !important;
+    }
+
+    .md\:w-\[10\%\] {
+      width: 10% !important;
+    }
+
+    .md\:w-\[25\%\] {
+      width: 25% !important;
+    }
+
+    .md\:w-\[30\%\] {
+      width: 30% !important;
+    }
   }
 
   /* Увечья SVG */
   .injury-figure svg {
-    width: 60px !important;
+    width: calc(45px * var(--print-scale, 1)) !important;
     height: auto !important;
-  }
-
-  /* Скрыть элементы управления сложных полосок */
-  .no-print {
-    display: none !important;
   }
 }
 
