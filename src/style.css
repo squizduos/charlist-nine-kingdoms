@@ -80,6 +80,15 @@ body {
   background-color: var(--color-ink);
 }
 
+/* The sixth Mainland kingdom dot is an optional rank. */
+.dot.optional-dot {
+  border-color: #9ca3af;
+}
+
+.dot.optional-dot.filled {
+  background-color: #6b7280;
+}
+
 .dot:hover {
   background-color: rgba(26, 26, 26, 0.3);
 }
@@ -94,6 +103,14 @@ body {
 
 .dark .dot.filled:hover {
   background-color: rgba(229, 229, 229, 0.7);
+}
+
+.dot.optional-dot:hover {
+  background-color: rgba(156, 163, 175, 0.45);
+}
+
+.dot.optional-dot.filled:hover {
+  background-color: #4b5563;
 }
 
 /* Print styles - компактная раскладка в стиле референсных D&D чар-листов:
@@ -202,6 +219,14 @@ body {
 
   .dot.filled {
     background-color: #1a1a1a !important;
+  }
+
+  .dot.optional-dot {
+    border-color: #9ca3af !important;
+  }
+
+  .dot.optional-dot.filled {
+    background-color: #6b7280 !important;
   }
 
   .tab-content > div {

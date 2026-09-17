@@ -5,8 +5,10 @@ const props = withDefaults(defineProps<{
   max: number
   modelValue: number
   disabled?: boolean
+  optionalLastDot?: boolean
 }>(), {
-  disabled: false
+  disabled: false,
+  optionalLastDot: false
 })
 
 const emit = defineEmits<{
@@ -41,6 +43,7 @@ function isFilled(dotIndex: number): boolean {
       class="dot"
       :class="{ 
         'filled': isFilled(dot),
+        'optional-dot': optionalLastDot && dot === max,
         'cursor-not-allowed opacity-60': disabled 
       }"
       :disabled="disabled"

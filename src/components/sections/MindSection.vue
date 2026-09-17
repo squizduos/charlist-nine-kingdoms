@@ -99,7 +99,8 @@ watch(
             <span class="text-sm font-medium w-6">{{ index + 1 }}</span>
             <DotStrip
               v-model="character.mind.kingdoms[index]"
-              :max="5"
+              :max="6"
+              optional-last-dot
             />
           </div>
         </div>

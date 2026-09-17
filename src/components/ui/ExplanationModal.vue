@@ -14,8 +14,13 @@ const emit = defineEmits<{
 
 const localExplanation = ref(props.explanation)
 
-watch(() => props.explanation, (newVal) => {
-  localExplanation.value = newVal
+// При открытии всегда загружаем текст выбранной заметки. Это важно и для
+// двух пустых заметок: их props.explanation одинаковы, но локальное поле
+// могло сохранить текст из предыдущего открытия.
+watch([() => props.modelValue, () => props.explanation], ([isOpen, explanation]) => {
+  if (isOpen) {
+    localExplanation.value = explanation
+  }
 })
 
 function close() {

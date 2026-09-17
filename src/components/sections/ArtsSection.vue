@@ -5,10 +5,14 @@ import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
 import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
 import CollapsibleFields from '../ui/CollapsibleFields.vue'
+import ArtPicker from '../ui/ArtPicker.vue'
+import ArtInfoModal from '../ui/ArtInfoModal.vue'
+import { getArtSummary, getArtsForSheet, type ArtDefinition } from '../../data/arts'
 import type { EditableParameter } from '../../types/character'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
+const availableArts = computed(() => getArtsForSheet(character.value.sheetType))
 
 function isParamUsed(param: EditableParameter): boolean {
   return param.value > 0 || !!param.name?.trim() || !!param.explanation?.trim()
@@ -20,6 +24,31 @@ const modalTitle = ref('')
 const currentExplanation = ref('')
 const currentBlock = ref<'arts' | 'birthrights'>('arts')
 const currentIndex = ref(0)
+const showArtInfoModal = ref(false)
+const selectedArtInfo = ref<ArtDefinition | null>(null)
+
+function getSelectedArt(name: string): ArtDefinition | null {
+  return availableArts.value.find((art) => art.name === name) || null
+}
+
+function getArtTooltip(art: EditableParameter): string {
+  const selectedArt = getSelectedArt(art.name)
+  return selectedArt ? getArtSummary(selectedArt) : art.explanation || ''
+}
+
+function handleArtSelection(art: EditableParameter, selectedArt: ArtDefinition | null) {
+  if (selectedArt) art.explanation = ''
+}
+
+function openArtExplanation(art: EditableParameter, index: number) {
+  const selectedArt = getSelectedArt(art.name)
+  if (selectedArt) {
+    selectedArtInfo.value = selectedArt
+    showArtInfoModal.value = true
+    return
+  }
+  openExplanation('arts', index)
+}
 
 function openExplanation(block: 'arts' | 'birthrights', index: number) {
   const item = block === 'arts' 
@@ -52,15 +81,15 @@ function saveExplanation(explanation: string) {
           <CollapsibleFields :items="character.arts" :is-used="isParamUsed">
             <template #default="{ item: art, index, visible }">
               <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(art) }">
-                <input
+                <ArtPicker
                   v-model="art.name"
-                  type="text"
-                  class="flex-1 text-sm min-w-[120px]"
+                  :options="availableArts"
+                  @select="handleArtSelection(art, $event)"
                 />
                 <ExplanationTooltip
-                  :explanation="art.explanation || ''"
-                  :has-explanation="!!art.explanation"
-                  @click="openExplanation('arts', index)"
+                  :explanation="getArtTooltip(art)"
+                  :has-explanation="!!getArtTooltip(art)"
+                  @click="openArtExplanation(art, index)"
                 />
                 <DotStrip
                   v-model="art.value"
@@ -108,5 +137,6 @@ function saveExplanation(explanation: string) {
       :explanation="currentExplanation"
       @update:explanation="saveExplanation"
     />
+    <ArtInfoModal v-model="showArtInfoModal" :art="selectedArtInfo" />
   </div>
 </template>
