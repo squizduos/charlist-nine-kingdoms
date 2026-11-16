@@ -139,6 +139,7 @@ export interface Character {
   // Секция V: Инвентарь
   artifacts: EditableParameter[] // 11 параметров
   equipment: EditableParameter[] // 14 параметров
+  wornEquipment: EditableParameter[] // 14 fixed slots
   consumables: Consumables
 
   // Секция VI: Спутники
@@ -236,6 +237,7 @@ export function createEmptyCharacter(): Character {
 
     artifacts: createEditableParams(11),
     equipment: createEditableParams(14),
+    wornEquipment: createEditableParams(14),
     consumables: {
       regular: createEditableParams(3),
       magical: createEditableParams(3),

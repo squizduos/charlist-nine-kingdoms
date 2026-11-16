@@ -121,7 +121,7 @@ function saveExplanation(explanation: string) {
                 />
                 <DotStrip
                   v-model="birthright.value"
-                  :max="5"
+                  :max="6"
                 />
               </div>
             </template>

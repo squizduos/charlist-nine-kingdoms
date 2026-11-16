@@ -9,6 +9,7 @@ import type { EditableParameter } from '../../types/character'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
+const equipmentSlots = ['Голова', 'Спина', 'Торс', 'Шея', 'Руки', 'Обувь', ...Array(5).fill('Аксессуар'), ...Array(3).fill('Оружие')]
 
 function isParamUsed(param: EditableParameter): boolean {
   return param.value > 0 || !!param.name?.trim() || !!param.explanation?.trim()
@@ -116,61 +117,74 @@ function saveExplanation(explanation: string) {
         </div>
       </div>
       
-      <!-- Блок 3: Расходники -->
-      <div class="consumables-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
-        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Расходники</h3>
-        
-        <!-- Обычные -->
-        <div class="mb-4">
-          <h4 class="text-sm font-semibold mb-2 opacity-70">Обычные</h4>
-          <div class="space-y-2">
-            <CollapsibleFields :items="character.consumables.regular" :is-used="isParamUsed">
-              <template #default="{ item, index, visible }">
-                <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(item) }">
-                  <input
-                    v-model="item.name"
-                    type="text"
-                    class="flex-1 text-sm min-w-[80px]"
-                  />
-                  <ExplanationTooltip
-                    :explanation="item.explanation || ''"
-                    :has-explanation="!!item.explanation"
-                    @click="openExplanation('regular', index)"
-                  />
-                  <DotStrip
-                    v-model="item.value"
-                    :max="9"
-                  />
-                </div>
-              </template>
-            </CollapsibleFields>
+      <div class="worn-equipment-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Экипировка</h3>
+        <div class="space-y-2">
+          <div v-for="(slot, index) in equipmentSlots" :key="index" class="flex flex-wrap items-center gap-2" :class="{ 'print:hidden': !isParamUsed(character.wornEquipment[index]) }">
+            <label :for="`worn-equipment-${index}`" class="text-sm w-20 shrink-0">{{ slot }}</label>
+            <input :id="`worn-equipment-${index}`" v-model="character.wornEquipment[index].name" type="text" class="flex-1 text-sm min-w-[80px]" placeholder="Название предмета" />
+            <DotStrip v-model="character.wornEquipment[index].value" :max="6" />
           </div>
         </div>
+      </div>
+
+      <!-- Блок 3: Расходники -->
+      <div class="consumables-block rounded-lg p-4 md:col-span-3" style="background-color: var(--color-surface-secondary);">
+        <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Расходники</h3>
         
-        <!-- Магические -->
-        <div>
-          <h4 class="text-sm font-semibold mb-2 opacity-70">Магические</h4>
-          <div class="space-y-2">
-            <CollapsibleFields :items="character.consumables.magical" :is-used="isParamUsed">
-              <template #default="{ item, index, visible }">
-                <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(item) }">
-                  <input
-                    v-model="item.name"
-                    type="text"
-                    class="flex-1 text-sm min-w-[80px]"
-                  />
-                  <ExplanationTooltip
-                    :explanation="item.explanation || ''"
-                    :has-explanation="!!item.explanation"
-                    @click="openExplanation('magical', index)"
-                  />
-                  <DotStrip
-                    v-model="item.value"
-                    :max="9"
-                  />
-                </div>
-              </template>
-            </CollapsibleFields>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Обычные -->
+          <div class="mb-4">
+            <h4 class="text-sm font-semibold mb-2 opacity-70">Обычные</h4>
+            <div class="space-y-2">
+              <CollapsibleFields :items="character.consumables.regular" :is-used="isParamUsed">
+                <template #default="{ item, index, visible }">
+                  <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(item) }">
+                    <input
+                      v-model="item.name"
+                      type="text"
+                      class="flex-1 text-sm min-w-[80px]"
+                    />
+                    <ExplanationTooltip
+                      :explanation="item.explanation || ''"
+                      :has-explanation="!!item.explanation"
+                      @click="openExplanation('regular', index)"
+                    />
+                    <DotStrip
+                      v-model="item.value"
+                      :max="9"
+                    />
+                  </div>
+                </template>
+              </CollapsibleFields>
+            </div>
+          </div>
+        
+          <!-- Магические -->
+          <div>
+            <h4 class="text-sm font-semibold mb-2 opacity-70">Магические</h4>
+            <div class="space-y-2">
+              <CollapsibleFields :items="character.consumables.magical" :is-used="isParamUsed">
+                <template #default="{ item, index, visible }">
+                  <div v-show="visible" class="flex items-center gap-2" :class="{ 'print:hidden': !isParamUsed(item) }">
+                    <input
+                      v-model="item.name"
+                      type="text"
+                      class="flex-1 text-sm min-w-[80px]"
+                    />
+                    <ExplanationTooltip
+                      :explanation="item.explanation || ''"
+                      :has-explanation="!!item.explanation"
+                      @click="openExplanation('magical', index)"
+                    />
+                    <DotStrip
+                      v-model="item.value"
+                      :max="9"
+                    />
+                  </div>
+                </template>
+              </CollapsibleFields>
+            </div>
           </div>
         </div>
       </div>

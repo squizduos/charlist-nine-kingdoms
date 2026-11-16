@@ -131,7 +131,7 @@ function saveExplanation(explanation: string) {
                 />
                 <DotStrip
                   v-model="feature.value"
-                  :max="5"
+                  :max="6"
                 />
               </div>
             </template>
