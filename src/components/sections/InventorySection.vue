@@ -92,7 +92,8 @@ function saveExplanation(explanation: string) {
                 />
                 <DotStrip
                   v-model="artifact.value"
-                  :max="5"
+                  :max="6"
+                  optional-last-dot
                 />
               </div>
             </template>
@@ -136,7 +137,7 @@ function saveExplanation(explanation: string) {
               <option v-for="slot in availableSlots(item.slot)" :key="slot" :value="slot">{{ slot }}</option>
             </select>
             <input v-model="item.name" :aria-label="`Название предмета ${index + 1}`" type="text" class="flex-1 text-sm min-w-[80px]" placeholder="Название предмета" />
-            <DotStrip v-model="item.value" :max="6" />
+            <DotStrip v-model="item.value" :max="6" optional-last-dot />
             <button type="button" class="text-sm opacity-70 hover:opacity-100 no-print" :aria-label="`Удалить предмет ${index + 1}`" @click="character.wornEquipment.splice(index, 1)">×</button>
           </div>
           <button v-if="availableSlots().length" type="button" class="collapsible-toggle text-xs opacity-60 hover:opacity-100 mt-1 underline no-print" @click="addWornEquipment">Добавить предмет</button>

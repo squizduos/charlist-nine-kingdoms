@@ -28,6 +28,7 @@ test('equipment migration, capacity and sixth dots', async () => {
     legacy.wornEquipment[0] = { name: 'helmet', value: 6, explanation: 'kept' }
     legacy.wornEquipment[10] = { name: 'ring', value: 2 }
     legacy.equipment[0] = { name: 'old equipment', value: 4 }
+    legacy.artifacts[0] = { name: 'artifact', value: 5 }
     assert.equal(store.importFromJSON(JSON.stringify(legacy)), true)
     assert.deepEqual(JSON.parse(JSON.stringify(store.character.wornEquipment)), [
       { name: 'helmet', value: 6, explanation: 'kept', slot: 'Голова' },
@@ -41,6 +42,15 @@ test('equipment migration, capacity and sixth dots', async () => {
       return renderToString(app)
     }
     let html = await render(Inventory)
+    const artifactsBlock = html.split('artifacts-block')[1].split('equipment-block')[0]
+    const wornBlock = html.split('worn-equipment-block')[1].split('consumables-block')[0]
+    assert.equal((artifactsBlock.match(/optional-dot/g) ?? []).length, 11)
+    assert.match(artifactsBlock, /Точка 6 из 6/)
+    assert.equal((wornBlock.match(/optional-dot/g) ?? []).length, 2)
+    assert.match(wornBlock, /Точка 6 из 6/)
+    store.character.artifacts[0].value = 6
+    assert.equal(store.importFromJSON(store.exportToJSON()), true)
+    assert.equal(store.character.artifacts[0].value, 6)
     let selects = [...html.matchAll(/<select\b[^>]*>(.*?)<\/select>/gs)].map(match => match[1])
     assert.equal(selects.length, 2)
     assert.match(selects[0], /Голова/)
