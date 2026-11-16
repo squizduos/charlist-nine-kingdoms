@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
-import type { Character, CharacterTab } from '../types/character'
-import { createEmptyCharacter } from '../types/character'
+import type { Character, CharacterTab, EditableParameter, WornEquipmentItem } from '../types/character'
+import { createEmptyCharacter, legacyWornEquipmentSlots } from '../types/character'
 import { generateFilename } from '../utils/transliterate'
 
 const STORAGE_KEY = 'nine-kingdoms-tabs'
@@ -14,6 +14,12 @@ function mergeWithEmptyCharacter(partial: Partial<Character>): Character {
     ...empty,
     ...partial,
     mind: { ...empty.mind, ...partial.mind },
+    wornEquipment: ((partial.wornEquipment ?? []) as (EditableParameter | WornEquipmentItem)[]).flatMap((item, index) => {
+      if ('slot' in item) return [item]
+      const slot = legacyWornEquipmentSlots[index]
+      if (!slot || !(item.name?.trim() || item.value > 0 || item.explanation?.trim())) return []
+      return [{ ...item, slot }]
+    }),
   }
 }
 

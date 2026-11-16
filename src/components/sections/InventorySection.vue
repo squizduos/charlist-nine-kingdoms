@@ -5,11 +5,22 @@ import DotStrip from '../ui/DotStrip.vue'
 import ExplanationModal from '../ui/ExplanationModal.vue'
 import ExplanationTooltip from '../ui/ExplanationTooltip.vue'
 import CollapsibleFields from '../ui/CollapsibleFields.vue'
-import type { EditableParameter } from '../../types/character'
+import { wornEquipmentLimits } from '../../types/character'
+import type { EditableParameter, WornEquipmentSlot } from '../../types/character'
 
 const store = useCharacterStore()
 const character = computed(() => store.character)
-const equipmentSlots = ['Голова', 'Спина', 'Торс', 'Шея', 'Руки', 'Обувь', ...Array(5).fill('Аксессуар'), ...Array(3).fill('Оружие')]
+const equipmentSlots = Object.keys(wornEquipmentLimits) as WornEquipmentSlot[]
+
+function availableSlots(currentSlot?: WornEquipmentSlot): WornEquipmentSlot[] {
+  return equipmentSlots.filter(slot => slot === currentSlot ||
+    character.value.wornEquipment.filter(item => item.slot === slot).length < wornEquipmentLimits[slot])
+}
+
+function addWornEquipment() {
+  const slot = availableSlots()[0]
+  if (slot) character.value.wornEquipment.push({ slot, name: '', value: 0 })
+}
 
 function isParamUsed(param: EditableParameter): boolean {
   return param.value > 0 || !!param.name?.trim() || !!param.explanation?.trim()
@@ -120,11 +131,15 @@ function saveExplanation(explanation: string) {
       <div class="worn-equipment-block rounded-lg p-4" style="background-color: var(--color-surface-secondary);">
         <h3 class="text-lg font-bold mb-3 pb-1" style="border-bottom: 1px solid rgba(128,128,128,0.3);">Экипировка</h3>
         <div class="space-y-2">
-          <div v-for="(slot, index) in equipmentSlots" :key="index" class="flex flex-wrap items-center gap-2" :class="{ 'print:hidden': !isParamUsed(character.wornEquipment[index]) }">
-            <label :for="`worn-equipment-${index}`" class="text-sm w-20 shrink-0">{{ slot }}</label>
-            <input :id="`worn-equipment-${index}`" v-model="character.wornEquipment[index].name" type="text" class="flex-1 text-sm min-w-[80px]" placeholder="Название предмета" />
-            <DotStrip v-model="character.wornEquipment[index].value" :max="6" />
+          <div v-for="(item, index) in character.wornEquipment" :key="index" class="flex flex-wrap items-center gap-2" :class="{ 'print:hidden': !isParamUsed(item) }">
+            <select v-model="item.slot" :aria-label="`Место экипировки ${index + 1}`" class="text-sm max-w-full">
+              <option v-for="slot in availableSlots(item.slot)" :key="slot" :value="slot">{{ slot }}</option>
+            </select>
+            <input v-model="item.name" :aria-label="`Название предмета ${index + 1}`" type="text" class="flex-1 text-sm min-w-[80px]" placeholder="Название предмета" />
+            <DotStrip v-model="item.value" :max="6" />
+            <button type="button" class="text-sm opacity-70 hover:opacity-100 no-print" :aria-label="`Удалить предмет ${index + 1}`" @click="character.wornEquipment.splice(index, 1)">×</button>
           </div>
+          <button v-if="availableSlots().length" type="button" class="collapsible-toggle text-xs opacity-60 hover:opacity-100 mt-1 underline no-print" @click="addWornEquipment">Добавить предмет</button>
         </div>
       </div>
 

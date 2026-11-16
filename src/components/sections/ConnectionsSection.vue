@@ -132,6 +132,7 @@ function saveExplanation(explanation: string) {
                 <DotStrip
                   v-model="feature.value"
                   :max="6"
+                  optional-last-dot
                 />
               </div>
             </template>

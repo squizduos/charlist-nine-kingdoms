@@ -15,6 +15,28 @@ export interface EditableParameter {
   explanation?: string
 }
 
+export const wornEquipmentLimits = {
+  'Голова': 1,
+  'Спина': 1,
+  'Торс': 1,
+  'Шея': 1,
+  'Руки': 1,
+  'Обувь': 1,
+  'Аксессуар': 5,
+  'Оружие': 3,
+} as const
+
+export type WornEquipmentSlot = keyof typeof wornEquipmentLimits
+export interface WornEquipmentItem extends EditableParameter {
+  slot: WornEquipmentSlot
+}
+
+export const legacyWornEquipmentSlots: WornEquipmentSlot[] = [
+  'Голова', 'Спина', 'Торс', 'Шея', 'Руки', 'Обувь',
+  ...Array<WornEquipmentSlot>(5).fill('Аксессуар'),
+  ...Array<WornEquipmentSlot>(3).fill('Оружие'),
+]
+
 // Специализация (атрибут с пояснением)
 export interface Specialization {
   name: string
@@ -139,7 +161,7 @@ export interface Character {
   // Секция V: Инвентарь
   artifacts: EditableParameter[] // 11 параметров
   equipment: EditableParameter[] // 14 параметров
-  wornEquipment: EditableParameter[] // 14 fixed slots
+  wornEquipment: WornEquipmentItem[]
   consumables: Consumables
 
   // Секция VI: Спутники
@@ -237,7 +259,7 @@ export function createEmptyCharacter(): Character {
 
     artifacts: createEditableParams(11),
     equipment: createEditableParams(14),
-    wornEquipment: createEditableParams(14),
+    wornEquipment: [],
     consumables: {
       regular: createEditableParams(3),
       magical: createEditableParams(3),
